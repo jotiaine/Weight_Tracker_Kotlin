@@ -10,8 +10,8 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        val btnSignIn = findViewById<Button>(R.id.btnSignIn)
-        val btnSignUp = findViewById<Button>(R.id.btnSignUp)
+        val btnSignIn = findViewById<Button>(R.id.btnSignInActivity)
+        val btnSignUp = findViewById<Button>(R.id.btnSignUpActivity)
         btnSignIn.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
