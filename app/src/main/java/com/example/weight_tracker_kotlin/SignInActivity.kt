@@ -5,18 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var txvForgotPassword: TextView // forgot password textview in sign in activity xml
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        auth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance() // get instance of firebase auth
+        txvForgotPassword = findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
 
-        // sign in button in sign in activity
+        // sign in button in sign in activity xml
         val btnSignIn = findViewById<Button>(R.id.btnSignIn)
 
         btnSignIn.setOnClickListener {
@@ -56,6 +59,14 @@ class SignInActivity : AppCompatActivity() {
                 // this will prevent data leaks
                 auth.signOut()
             }
+        }
+
+        // listening txvForgotPassword
+        txvForgotPassword.setOnClickListener {
+            // go to forgot password activity on click
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

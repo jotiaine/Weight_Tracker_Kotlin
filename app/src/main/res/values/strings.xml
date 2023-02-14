@@ -17,4 +17,8 @@
     <string name="signUpPasswordHintText">password</string>
     <string name="sign_upBtnText">Sign Up</string>
     <string name="signUpBtnText">Sign Up</string>
+    <string name="weightstepsLogoText">WeightSteps</string>
+    <string name="weightStepsLogoTextBelow">Take the first and the rest will follow</string>
+    <string name="signInBtnText">Sign In</string>
+    <string name="signUpBtnTextActivity">Sign Up</string>
 </resources>
