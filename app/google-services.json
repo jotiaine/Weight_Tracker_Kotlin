@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "588810210014",
+    "project_id": "weight-tracker-kotlin",
+    "storage_bucket": "weight-tracker-kotlin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588810210014:android:1c61bc2db53a4dab7d904f",
+        "android_client_info": {
+          "package_name": "com.jonitiainen.weight_tracker_kotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588810210014-dmceuquva4jnh16kneokim703rtpgijd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz8LvAQPmRdSccBVt_uXQfKGTUK2SMKe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588810210014-dmceuquva4jnh16kneokim703rtpgijd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
