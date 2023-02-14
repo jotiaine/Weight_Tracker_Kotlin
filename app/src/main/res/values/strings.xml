@@ -16,4 +16,5 @@
     <string name="signUpUsernameTextHint">username</string>
     <string name="signUpPasswordHintText">password</string>
     <string name="sign_upBtnText">Sign Up</string>
+    <string name="signUpBtnText">Sign Up</string>
 </resources>

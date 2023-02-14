@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/signUpUsernameText"
+                android:id="@+id/signInUsernameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -37,7 +37,7 @@
                 android:autofillHints="" />
 
             <EditText
-                android:id="@+id/signUpPasswordText"
+                android:id="@+id/signInPasswordText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -58,7 +58,7 @@
                 android:textColor="@color/black" />
 
             <Button
-                android:id="@+id/btnSignUp"
+                android:id="@+id/btnSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_inBtnText" />
