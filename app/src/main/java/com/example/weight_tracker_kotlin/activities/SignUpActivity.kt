@@ -103,7 +103,7 @@ class SignUpActivity : AppCompatActivity() {
            signUp()
         }
 
-        //TODO: 1. add sign up functionality
+        //TODO: 1. add sign up functionality - DONE
         //TODO: 2. Create main activity, statistic activity and account layout activity
         //TODO: 3. Create logout in account activity
         //TODO: 4. Create weight entry in main activity
