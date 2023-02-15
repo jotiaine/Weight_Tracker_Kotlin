@@ -1,4 +1,4 @@
-package com.example.weight_tracker_kotlin
+package com.example.weight_tracker_kotlin.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.example.weight_tracker_kotlin.R
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : AppCompatActivity() {
@@ -24,8 +25,8 @@ class SignInActivity : AppCompatActivity() {
 
         btnSignIn.setOnClickListener {
             try {
-                val signInUsernameText = findViewById<EditText>(R.id.signInUsernameText)
-                val signInPasswordText = findViewById<EditText>(R.id.signInPasswordText)
+                val signInUsernameText = findViewById<EditText>(R.id.signUpUsernameText)
+                val signInPasswordText = findViewById<EditText>(R.id.signUpPasswordText)
 
                 auth.signInWithEmailAndPassword(
                     signInUsernameText.text.toString(),

@@ -1,8 +1,8 @@
-package com.example.weight_tracker_kotlin
+package com.example.weight_tracker_kotlin.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.weight_tracker_kotlin.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
