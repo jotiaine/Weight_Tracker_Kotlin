@@ -15,12 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var dataHandler: DataHandler // data handler
-    private lateinit var auth: FirebaseAuth
+    lateinit var auth: FirebaseAuth
     private lateinit var btnSignUp: Button // Sign up button
-    private lateinit var signUpUsernameText: EditText // username text
-    private lateinit var signUpPasswordText: EditText // password text
+    lateinit var signUpUsernameText: EditText // username text
+    lateinit var signUpPasswordText: EditText // password text
 
-    private fun validateSignUp(): Boolean {
+    fun validateSignUp(): Boolean {
         return when {
             signUpUsernameText.text.toString().isEmpty() -> {
                 signUpUsernameText.error = "Please enter username"
@@ -34,7 +34,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun signUp() {
+    fun signUp() {
         try {
             signUpUsernameText = findViewById(R.id.signUpUsernameText)
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
