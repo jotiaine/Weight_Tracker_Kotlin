@@ -3,7 +3,7 @@ package com.example.weight_tracker_kotlin.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -119,6 +119,19 @@ class SignInActivity : AppCompatActivity() {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                // go to intro activity on back button click
+                val intent = Intent(this, IntroActivity::class.java)
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
