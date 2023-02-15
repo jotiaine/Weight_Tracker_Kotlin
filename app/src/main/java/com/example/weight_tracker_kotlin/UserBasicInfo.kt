@@ -1,8 +1,8 @@
 package com.example.weight_tracker_kotlin
 
 class UserBasicInfo {
-    private var uid = "" // default
-    private var gender = "" // default
+    private var uid = "default" // default
+    private var gender = "default" // default
     private var age = 0 // default
     private var height = 0.0 // default
     private var goal = 0.0 // default
@@ -27,5 +27,26 @@ class UserBasicInfo {
 
     fun setGoal(goal: Double) {
         this.goal = goal
+    }
+
+    // Getters
+    fun getUID(): String {
+        return uid
+    }
+
+    fun getGender(): String {
+        return gender
+    }
+
+    fun getAge(): Int {
+        return age
+    }
+
+    fun getHeight(): Double {
+        return height
+    }
+
+    fun getGoal(): Double {
+        return goal
     }
 }

@@ -39,6 +39,7 @@ class SignUpActivity : AppCompatActivity() {
             signUpUsernameText = findViewById(R.id.signUpUsernameText)
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
             auth = FirebaseAuth.getInstance() // get instance of firebase auth
+            dataHandler = DataHandler()
 
             // Validate sign up
             if (validateSignUp()) {
@@ -56,41 +57,63 @@ class SignUpActivity : AppCompatActivity() {
 
                             // create user in firestore default values
                             val userBasicInfo = UserBasicInfo()
-
                             val userMeasurements = UserMeasurements()
 
-                            // set user id
+                            // set uid from firebase auth
                             userBasicInfo.setUID(auth.currentUser?.uid.toString())
                             userMeasurements.setUID(auth.currentUser?.uid.toString())
 
-                            dataHandler = DataHandler()
+                            // userbasicinfo
+                            val uidBasicInfo = userBasicInfo.getUID()
+                            val gender = userBasicInfo.getGender()
+                            val age = userBasicInfo.getAge()
+                            val height = userBasicInfo.getHeight()
+                            val goal = userBasicInfo.getGoal()
+
+                            // usermeasurements
+//                            var uidMeasurements = userMeasurements.getUID()
+                            val weight = userMeasurements.getWeight()
+                            val bmi = userMeasurements.getBMI()
+                            val circumference = userMeasurements.getCircumference()
+                            val bodyFat = userMeasurements.getBodyFat()
+                            val date = userMeasurements.getDate()
+
 
                             // add user default values to firestore
-                            dataHandler.registerUser(this, userBasicInfo, userMeasurements)
+                            dataHandler.registerUser(
+                                this, uidBasicInfo,
+                                gender, age, height, goal, weight, bmi, circumference, bodyFat, date
+                            )
 
-                            // go to main activity
-                            val intent = Intent(this, MainActivity::class.java)
+                            // go to intro activity
+                            val intent = Intent(this, IntroActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
                             // If sign up fails
-                            AlertDialog.Builder(this)
-                                .setTitle("Error")
-                                .setMessage("Sign up failed")
-                                .setPositiveButton("OK") { dialog, _ ->
-                                    dialog.dismiss()
-                                }
-                                .show()
+                            println("Sign up failed: ${task.exception?.message}")
+                            if (!isFinishing) {
+                                AlertDialog.Builder(this)
+                                    .setTitle("Error")
+                                    .setMessage("User registration failed")
+                                    .setPositiveButton("OK") { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+                            }
                         }
                     }
             } else {
-                AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage("Please enter username and password")
-                    .setPositiveButton("OK") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
+                println("Sign up failed")
+                if (!isFinishing) {
+                    AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("User registration failed")
+                        .setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
             }
             clearTextFields()
         } catch (e: Exception) {
@@ -103,29 +126,29 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     fun userRegisteredSuccess() {
-        AlertDialog.Builder(this)
-            .setTitle("Success")
-            .setMessage("User registered successfully")
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-
+        if (!isFinishing) {
+            AlertDialog.Builder(this)
+                .setTitle("Success")
+                .setMessage("User registration success")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
         auth.signOut()
-        finish()
     }
 
     fun userRegisteredFailed() {
-        AlertDialog.Builder(this)
-            .setTitle("Error")
-            .setMessage("User registration failed")
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-
+        if (!isFinishing) {
+            AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage("User registered failed")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
         auth.signOut()
-        finish()
     }
 
     private fun clearTextFields() {
@@ -156,7 +179,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 // go to intro activity on back button click
                 val intent = Intent(this, IntroActivity::class.java)
