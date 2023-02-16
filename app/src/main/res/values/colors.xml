@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- My custom colors -->
+    <color name="btn_custom_purple">#7B1FA2</color>
+    <color name="btn_custom_font_color">#CCCCCC</color>
+    <color name="custom_font_color_gray">#888888</color>
+    <color name="custom_light_blue_color">#008CBA</color>
+
+
 </resources>
