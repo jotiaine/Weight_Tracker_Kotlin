@@ -14,5 +14,9 @@
     <color name="custom_font_color_gray">#888888</color>
     <color name="custom_light_blue_color">#008CBA</color>
 
+    <!--  Bottom nav  -->
+    <color name="bottom_nav_icon_selected">#008CBA</color>
+    <color name="bottom_nav_icon_unselected">@color/black </color>
+
 
 </resources>

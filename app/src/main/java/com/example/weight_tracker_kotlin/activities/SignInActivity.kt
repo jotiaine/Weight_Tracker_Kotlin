@@ -32,8 +32,8 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signIn() {
         try {
-            signInUsernameText = findViewById(R.id.signUpUsernameText)
-            signInPasswordText = findViewById(R.id.signUpPasswordText)
+            signInUsernameText = findViewById(R.id.signInUsernameText)
+            signInPasswordText = findViewById(R.id.signInPasswordText)
             auth = FirebaseAuth.getInstance() // get instance of firebase auth
 
             // Validate sign in
