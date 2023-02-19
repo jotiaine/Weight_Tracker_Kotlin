@@ -3,9 +3,10 @@ package com.example.weight_tracker_kotlin.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.weight_tracker_kotlin.R
@@ -16,6 +17,9 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var txvForgotPassword: TextView // forgot password textview in sign in activity xml
     private lateinit var signInUsernameText: EditText // username text
     private lateinit var signInPasswordText: EditText // password text
+    private lateinit var imbGoBackSignIn: ImageButton // Sign in button
+    private lateinit var intent: Intent
+
     private fun validateSignIn(): Boolean {
         return when {
             signInUsernameText.text.toString().isEmpty() -> {
@@ -28,6 +32,13 @@ class SignInActivity : AppCompatActivity() {
             }
             else -> true
         }
+    }
+
+    private fun goBackToIntroActivity() {
+        // go to intro activity on click
+        intent = Intent(this, IntroActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun signIn() {
@@ -100,11 +111,17 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        // back button
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.hide() // hide action bar
+        // full screen
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
         txvForgotPassword =
             findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
+        imbGoBackSignIn = findViewById(R.id.imbGoBackSignIn)
+
 
         // sign in button in sign in activity xml
         val btnSignIn = findViewById<Button>(R.id.btnSignIn)
@@ -120,18 +137,10 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            android.R.id.home -> {
-                // go to intro activity on back button click
-                val intent = Intent(this, IntroActivity::class.java)
-                startActivity(intent)
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        // listening imbGoBack
+        imbGoBackSignIn.setOnClickListener {
+           goBackToIntroActivity()
         }
     }
 }

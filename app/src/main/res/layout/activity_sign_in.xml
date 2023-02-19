@@ -7,11 +7,34 @@
     android:background="@drawable/gradient_background_drawable"
     tools:context=".activities.SignInActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/imbGoBackSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="go back btn"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:srcCompat="@drawable/baseline_arrow_back_24" />
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:elevation="4dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
@@ -36,8 +59,8 @@
                 android:hint="@string/usernameHintText"
                 android:inputType="textEmailAddress"
                 android:minHeight="48dp"
-                android:textColor="@color/bottom_nav_icon_selected"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/custom_font_color_gray" />
 
             <EditText
                 android:id="@+id/signInPasswordText"
@@ -48,22 +71,27 @@
                 android:hint="@string/passwordHintText"
                 android:inputType="textPassword"
                 android:minHeight="48dp"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/custom_font_color_gray" />
 
             <TextView
                 android:id="@+id/txvForgotPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="@string/forgot_passwordBtnText"
-                android:textColor="@color/custom_font_color_gray" />
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btnSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_inBtnText" />
+                android:layout_marginTop="10dp"
+                android:minWidth="120dp"
+                android:text="@string/sign_inBtnText"
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

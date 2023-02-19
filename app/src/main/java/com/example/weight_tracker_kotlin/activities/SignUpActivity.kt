@@ -3,9 +3,10 @@ package com.example.weight_tracker_kotlin.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import com.example.weight_tracker_kotlin.DataHandler
 import com.example.weight_tracker_kotlin.R
@@ -19,8 +20,10 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var btnSignUp: Button // Sign up button
     lateinit var signUpUsernameText: EditText // username text
     lateinit var signUpPasswordText: EditText // password text
+    private lateinit var imbGoBackSignUp: ImageButton // Sign in button
+    private lateinit var intent: Intent
 
-    fun validateSignUp(): Boolean {
+    private fun validateSignUp(): Boolean {
         return when {
             signUpUsernameText.text.toString().isEmpty() -> {
                 signUpUsernameText.error = "Please enter username"
@@ -34,7 +37,14 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    fun signUp() {
+    private fun goBackToIntroActivity() {
+        // go to intro activity on click
+        intent = Intent(this, IntroActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun signUp() {
         try {
             signUpUsernameText = findViewById(R.id.signUpUsernameText)
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
@@ -156,18 +166,30 @@ class SignUpActivity : AppCompatActivity() {
         signUpPasswordText.setText("")
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        btnSignUp = findViewById(R.id.btnSignUp) // Get sign up button
+        supportActionBar?.hide() // hide action bar
+        // full screen
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
-        // back button
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        btnSignUp = findViewById(R.id.btnSignUp) // Get sign up button
+        imbGoBackSignUp = findViewById(R.id.imbGoBackSignUp)
 
         // Call sign up method from data handler when sign up button is clicked
         btnSignUp.setOnClickListener {
             signUp()
+        }
+
+        // listening imbGoBack
+        imbGoBackSignUp.setOnClickListener {
+            goBackToIntroActivity()
         }
 
         //TODO: 1. add sign up functionality - DONE
@@ -181,18 +203,5 @@ class SignUpActivity : AppCompatActivity() {
         //https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
         //TODO: 7. Create forgot password functionality
         //TODO: 8. Create change password functionality in account fragment
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                // go to intro activity on back button click
-                val intent = Intent(this, IntroActivity::class.java)
-                startActivity(intent)
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }

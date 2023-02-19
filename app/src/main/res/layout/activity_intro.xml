@@ -47,17 +47,20 @@
             android:id="@+id/btnSignInActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_medium"
+            android:minWidth="160dp"
             android:text="@string/signInBtnText"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnSignUpActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="160dp"
             android:text="@string/signUpBtnTextActivity"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
     </LinearLayout>
