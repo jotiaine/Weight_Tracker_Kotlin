@@ -118,8 +118,7 @@ class SignInActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        txvForgotPassword =
-            findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
+        txvForgotPassword = findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
         imbGoBackSignIn = findViewById(R.id.imbGoBackSignIn)
 
 
@@ -133,7 +132,7 @@ class SignInActivity : AppCompatActivity() {
         // listening txvForgotPassword
         txvForgotPassword.setOnClickListener {
             // go to forgot password activity on click
-            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
             finish()
         }

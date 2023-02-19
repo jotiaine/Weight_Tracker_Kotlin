@@ -10,6 +10,7 @@ import com.example.weight_tracker_kotlin.R
 class IntroActivity : AppCompatActivity() {
     private lateinit var btnSignIn: Button
     private lateinit var btnSignUp: Button
+    private lateinit var intent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +27,13 @@ class IntroActivity : AppCompatActivity() {
         btnSignUp = findViewById<Button>(R.id.btnSignUpActivity)
 
         btnSignIn.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
+            intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         btnSignUp.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
+            intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             finish()
         }
