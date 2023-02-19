@@ -14,7 +14,7 @@ import com.example.weight_tracker_kotlin.UserBasicInfo
 import com.example.weight_tracker_kotlin.UserMeasurements
 import com.google.firebase.auth.FirebaseAuth
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseClass() {
     private lateinit var dataHandler: DataHandler // data handler
     lateinit var auth: FirebaseAuth
     private lateinit var btnSignUp: Button // Sign up button
@@ -45,6 +45,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp() {
+        // Show loading dialog
+        showProgressBar()
         try {
             signUpUsernameText = findViewById(R.id.signUpUsernameText)
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
@@ -94,6 +96,9 @@ class SignUpActivity : AppCompatActivity() {
                                 this, uidBasicInfo,
                                 gender, age, height, goal, weight, bmi, circumference, bodyFat, date
                             )
+
+                            // hide progress bar
+                            hideProgressBar()
 
                             // go to intro activity
                             val intent = Intent(this, IntroActivity::class.java)

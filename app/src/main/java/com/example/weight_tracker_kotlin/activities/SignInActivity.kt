@@ -1,5 +1,6 @@
 package com.example.weight_tracker_kotlin.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.weight_tracker_kotlin.R
 import com.google.firebase.auth.FirebaseAuth
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseClass() {
     private lateinit var auth: FirebaseAuth
     private lateinit var txvForgotPassword: TextView // forgot password textview in sign in activity xml
     private lateinit var signInUsernameText: EditText // username text
@@ -42,6 +43,9 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun signIn() {
+        // Show loading dialog
+        showProgressBar()
+
         try {
             signInUsernameText = findViewById(R.id.signInUsernameText)
             signInPasswordText = findViewById(R.id.signInPasswordText)
@@ -55,6 +59,8 @@ class SignInActivity : AppCompatActivity() {
                 )
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
+                            hideProgressBar() // hide loading dialog
+
                             // print user info email, uid if exists
                             println("Signed in successfully")
                             println("User info: ${auth.currentUser?.email}")

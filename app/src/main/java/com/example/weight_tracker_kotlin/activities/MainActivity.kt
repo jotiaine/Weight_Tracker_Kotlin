@@ -1,9 +1,8 @@
 package com.example.weight_tracker_kotlin.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -11,11 +10,9 @@ import com.example.weight_tracker_kotlin.R
 import com.example.weight_tracker_kotlin.fragments.AccountFragment
 import com.example.weight_tracker_kotlin.fragments.HomeFragment
 import com.example.weight_tracker_kotlin.fragments.StatisticFragment
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseClass() {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var frameLayout: FrameLayout
     private lateinit var homeFragment: HomeFragment
@@ -28,10 +25,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.hide() // hide action bar
+        // full screen
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
         frameLayout = findViewById(R.id.frame_layout)
-
         fragmentManager = supportFragmentManager
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
         bottomNavigationView.setOnItemSelectedListener { item ->
