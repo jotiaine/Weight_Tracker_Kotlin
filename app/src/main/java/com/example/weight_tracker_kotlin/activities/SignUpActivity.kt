@@ -177,7 +177,7 @@ class SignUpActivity : AppCompatActivity() {
         //TODO: 3. Create logout in account activity - DONE
         //TODO: 4. Create weight entry in main activity
         //TODO: 5. Create weight summary in statistic activity
-        //TODO: 6. Create Delete account in account activity
+        //TODO: 6. Create Delete account in account activity - DONE BUT is not working!
         //TODO: 7. Create forgot password functionality
         //TODO: 8. Create change password functionality in account fragment
     }
