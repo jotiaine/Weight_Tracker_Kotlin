@@ -178,6 +178,7 @@ class SignUpActivity : AppCompatActivity() {
         //TODO: 4. Create weight entry in main activity
         //TODO: 5. Create weight summary in statistic activity
         //TODO: 6. Create Delete account in account activity - DONE BUT is not working!
+        //https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
         //TODO: 7. Create forgot password functionality
         //TODO: 8. Create change password functionality in account fragment
     }
