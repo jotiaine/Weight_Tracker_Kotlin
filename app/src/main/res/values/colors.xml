@@ -16,7 +16,8 @@
 
     <!--  Bottom nav  -->
     <color name="bottom_nav_icon_selected">#008CBA</color>
-    <color name="bottom_nav_icon_unselected">@color/black </color>
+    <color name="bottom_nav_icon_unselected">@color/white </color>
+    <color name="bottom_nav_text_color_unselected">@color/white</color>
 
 
 </resources>

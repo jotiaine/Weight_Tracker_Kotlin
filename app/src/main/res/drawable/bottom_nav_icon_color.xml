@@ -2,4 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/bottom_nav_icon_selected" android:state_checked="true" />
     <item android:color="@color/bottom_nav_icon_unselected" />
+    <item android:textColor="@color/bottom_nav_icon_selected" android:state_checked="true" />
+    <item android:textColor="@color/bottom_nav_icon_unselected" />
 </selector>

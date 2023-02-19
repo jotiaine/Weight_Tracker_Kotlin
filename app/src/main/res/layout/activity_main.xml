@@ -24,6 +24,7 @@
         android:background="@drawable/gradient_background_drawable"
         app:itemIconSize="26dp"
         app:itemIconTint="@drawable/bottom_nav_icon_color"
+        app:itemTextColor="@drawable/bottom_nav_icon_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
