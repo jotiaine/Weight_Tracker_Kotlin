@@ -173,10 +173,13 @@ class SignUpActivity : AppCompatActivity() {
         //TODO: 1. add sign up functionality - DONE
         //TODO: 1.5 add user default values to database when sign up - DONE
         //TODO: 2. Create main activity, statistic activity and account layout activity - DONE
-        //TODO: 2.5 Create Navigation
-        //TODO: 3. Create logout in account activity
+        //TODO: 2.5 Create Navigation - DONE
+        //TODO: 3. Create logout in account activity - DONE
         //TODO: 4. Create weight entry in main activity
         //TODO: 5. Create weight summary in statistic activity
+        //TODO: 6. Create Delete account in account activity
+        //TODO: 7. Create forgot password functionality
+        //TODO: 8. Create change password functionality in account fragment
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
