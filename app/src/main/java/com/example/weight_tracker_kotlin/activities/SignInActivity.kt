@@ -43,9 +43,6 @@ class SignInActivity : BaseClass() {
     }
 
     private fun signIn() {
-        // Show loading dialog
-        showProgressBar()
-
         try {
             signInUsernameText = findViewById(R.id.signInUsernameText)
             signInPasswordText = findViewById(R.id.signInPasswordText)
@@ -53,6 +50,9 @@ class SignInActivity : BaseClass() {
 
             // Validate sign in
             if (validateSignIn()) {
+                // Show loading dialog
+                showProgressBar()
+
                 auth.signInWithEmailAndPassword(
                     signInUsernameText.text.toString().trim(),
                     signInPasswordText.text.toString().trim()
@@ -124,7 +124,8 @@ class SignInActivity : BaseClass() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        txvForgotPassword = findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
+        txvForgotPassword =
+            findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
         imbGoBackSignIn = findViewById(R.id.imbGoBackSignIn)
 
 
@@ -145,7 +146,7 @@ class SignInActivity : BaseClass() {
 
         // listening imbGoBack
         imbGoBackSignIn.setOnClickListener {
-           goBackToIntroActivity()
+            goBackToIntroActivity()
         }
     }
 }

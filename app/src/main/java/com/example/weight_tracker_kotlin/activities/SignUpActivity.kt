@@ -45,8 +45,6 @@ class SignUpActivity : BaseClass() {
     }
 
     private fun signUp() {
-        // Show loading dialog
-        showProgressBar()
         try {
             signUpUsernameText = findViewById(R.id.signUpUsernameText)
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
@@ -55,6 +53,9 @@ class SignUpActivity : BaseClass() {
 
             // Validate sign up
             if (validateSignUp()) {
+                // Show loading dialog
+                showProgressBar()
+
                 auth.createUserWithEmailAndPassword(
                     signUpUsernameText.text.toString().trim(),
                     signUpPasswordText.text.toString().trim()

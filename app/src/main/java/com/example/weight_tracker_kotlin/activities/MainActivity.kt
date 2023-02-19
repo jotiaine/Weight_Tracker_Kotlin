@@ -36,10 +36,17 @@ class MainActivity : BaseClass() {
         fragmentManager = supportFragmentManager
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
+        // Show home fragment when user logins
+        if (savedInstanceState == null) {
+            homeFragment = HomeFragment()
+            fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.frame_layout, homeFragment)
+            fragmentTransaction.commit()
+        }
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
-                    // Already on the home destination
                     homeFragment = HomeFragment()
                     fragmentTransaction = fragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.frame_layout, homeFragment)
