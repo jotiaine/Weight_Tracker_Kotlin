@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
+import com.example.weight_tracker_kotlin.BaseClass
 import com.example.weight_tracker_kotlin.R
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseClass() {
     private lateinit var btnSignIn: Button
     private lateinit var btnSignUp: Button
     private lateinit var intent: Intent

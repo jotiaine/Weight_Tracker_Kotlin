@@ -1,41 +1,34 @@
 package com.example.weight_tracker_kotlin.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import androidx.appcompat.app.AlertDialog
-import com.example.weight_tracker_kotlin.DataHandler
+import android.widget.Toast
+import com.example.weight_tracker_kotlin.BaseClass
 import com.example.weight_tracker_kotlin.R
-import com.example.weight_tracker_kotlin.UserBasicInfo
-import com.example.weight_tracker_kotlin.UserMeasurements
-import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : BaseClass() {
-    private lateinit var dataHandler: DataHandler // data handler
-    lateinit var auth: FirebaseAuth
     private lateinit var btnSignUp: Button // Sign up button
-    lateinit var signUpUsernameText: EditText // username text
-    lateinit var signUpPasswordText: EditText // password text
+    private lateinit var signUpUsernameText: EditText // username text
+    private lateinit var signUpPasswordText: EditText // password text
     private lateinit var imbGoBackSignUp: ImageButton // Sign in button
     private lateinit var intent: Intent
 
-    private fun validateSignUp(): Boolean {
-        return when {
+    private fun validateSignUp() {
+         when {
             signUpUsernameText.text.toString().isEmpty() -> {
-                signUpUsernameText.error = "Please enter username"
-                false
+                Toast.makeText(this, "Please enter username", Toast.LENGTH_SHORT).show()
             }
             signUpPasswordText.text.toString().isEmpty() -> {
-                signUpPasswordText.error = "Please enter password"
-                false
+                Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show()
             }
-            else -> true
+            else -> signUp(signUpUsernameText.text.toString().trim(), signUpPasswordText.text.toString().trim())
         }
     }
+
 
     private fun goBackToIntroActivity() {
         // go to intro activity on click
@@ -44,135 +37,10 @@ class SignUpActivity : BaseClass() {
         finish()
     }
 
-    private fun signUp() {
-        try {
-            signUpUsernameText = findViewById(R.id.signUpUsernameText)
-            signUpPasswordText = findViewById(R.id.signUpPasswordText)
-            auth = FirebaseAuth.getInstance() // get instance of firebase auth
-            dataHandler = DataHandler()
-
-            // Validate sign up
-            if (validateSignUp()) {
-                // Show loading dialog
-                showProgressBar()
-
-                auth.createUserWithEmailAndPassword(
-                    signUpUsernameText.text.toString().trim(),
-                    signUpPasswordText.text.toString().trim()
-                )
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            // print user info email, uid if exists
-                            println("Signed up successfully")
-                            println("User info: ${auth.currentUser?.email}")
-                            println("User info: ${auth.currentUser?.uid}")
-                            println("User info: ${auth.currentUser}")
-
-                            // create user in firestore default values
-                            val userBasicInfo = UserBasicInfo()
-                            val userMeasurements = UserMeasurements()
-
-                            // set uid from firebase auth
-                            userBasicInfo.setUID(auth.currentUser?.uid.toString())
-                            userMeasurements.setUID(auth.currentUser?.uid.toString())
-
-                            // userbasicinfo
-                            val uidBasicInfo = userBasicInfo.getUID()
-                            val gender = userBasicInfo.getGender()
-                            val age = userBasicInfo.getAge()
-                            val height = userBasicInfo.getHeight()
-                            val goal = userBasicInfo.getGoal()
-
-                            // usermeasurements
-//                            var uidMeasurements = userMeasurements.getUID()
-                            val weight = userMeasurements.getWeight()
-                            val bmi = userMeasurements.getBMI()
-                            val circumference = userMeasurements.getCircumference()
-                            val bodyFat = userMeasurements.getBodyFat()
-                            val date = userMeasurements.getDate()
-
-
-                            // add user default values to firestore
-                            dataHandler.registerUser(
-                                this, uidBasicInfo,
-                                gender, age, height, goal, weight, bmi, circumference, bodyFat, date
-                            )
-
-                            // hide progress bar
-                            hideProgressBar()
-
-                            // go to intro activity
-                            val intent = Intent(this, IntroActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            // If sign up fails
-                            println("Sign up failed: ${task.exception?.message}")
-                            if (!isFinishing) {
-                                AlertDialog.Builder(this)
-                                    .setTitle("Error")
-                                    .setMessage("User registration failed")
-                                    .setPositiveButton("OK") { dialog, _ ->
-                                        dialog.dismiss()
-                                    }
-                                    .show()
-                            }
-                        }
-                    }
-            } else {
-                println("Sign up failed")
-                if (!isFinishing) {
-                    AlertDialog.Builder(this)
-                        .setTitle("Error")
-                        .setMessage("User registration failed")
-                        .setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .show()
-                }
-            }
-            clearTextFields()
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-        } finally {
-            println("Sign up complete")
-            clearTextFields()
-            auth.signOut()
-        }
-    }
-
-    fun userRegisteredSuccess() {
-        if (!isFinishing) {
-            AlertDialog.Builder(this)
-                .setTitle("Success")
-                .setMessage("User registration success")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
-        auth.signOut()
-    }
-
-    fun userRegisteredFailed() {
-        if (!isFinishing) {
-            AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage("User registered failed")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
-        auth.signOut()
-    }
-
     private fun clearTextFields() {
         signUpUsernameText.setText("")
         signUpPasswordText.setText("")
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -190,7 +58,10 @@ class SignUpActivity : BaseClass() {
 
         // Call sign up method from data handler when sign up button is clicked
         btnSignUp.setOnClickListener {
-            signUp()
+            signUpUsernameText = findViewById(R.id.signUpUsernameText)
+            signUpPasswordText = findViewById(R.id.signUpPasswordText)
+            validateSignUp()
+            clearTextFields()
         }
 
         // listening imbGoBack

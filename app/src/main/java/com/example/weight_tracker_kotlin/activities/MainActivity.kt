@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.weight_tracker_kotlin.BaseClass
 import com.example.weight_tracker_kotlin.R
 import com.example.weight_tracker_kotlin.fragments.AccountFragment
 import com.example.weight_tracker_kotlin.fragments.HomeFragment
