@@ -3,15 +3,12 @@ package com.example.weight_tracker_kotlin
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weight_tracker_kotlin.activities.IntroActivity
 import com.example.weight_tracker_kotlin.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 open class BaseClass : AppCompatActivity() {
-    private lateinit var fireStore: FirebaseFirestore // Firebase Firestore
+    private var fireStore = FirebaseFirestore.getInstance() // Firebase Firestore
     private lateinit var auth: FirebaseAuth // Firebase Auth
     private lateinit var userBasicInfo: UserBasicInfo
     private lateinit var userMeasurements: UserMeasurements
@@ -182,34 +179,16 @@ open class BaseClass : AppCompatActivity() {
     }
 
     private fun getCurrentUserID(): String {
-        // if auth is not initialized, initialize it
-        if (!::auth.isInitialized) {
-            auth = FirebaseAuth.getInstance()
-        }
-        return auth.currentUser?.uid.toString()
+        return FirebaseAuth.getInstance().currentUser?.uid.toString()
     }
 
 
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {
         try {
             // if auth is not initialized, initialize it
-            if (!::auth.isInitialized) {
-                auth = FirebaseAuth.getInstance()
-            }
-
-            // init userBasicInfo and userMeasurements if not initialized
-            if (!::userBasicInfo.isInitialized) {
-                userBasicInfo = UserBasicInfo()
-            }
-
-            if (!::userMeasurements.isInitialized) {
-                userMeasurements = UserMeasurements()
-            }
-
-            // init firestore if not initialized
-            if (!::fireStore.isInitialized) {
-                fireStore = Firebase.firestore
-            }
+            auth = FirebaseAuth.getInstance()
+            userBasicInfo = UserBasicInfo()
+            userMeasurements = UserMeasurements()
 
             // Show loading dialog
             showProgressBar()
@@ -220,23 +199,9 @@ open class BaseClass : AppCompatActivity() {
             )
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // hide progress bar
-                        hideProgressBar()
-
-                        // print user info email, uid if exists
-                        println("Signed up successfully")
-                        println("User info: ${auth.currentUser?.email}")
-                        println("User info: ${auth.currentUser?.uid}")
-                        println("User info: ${auth.currentUser}")
-
-
+                        println("Sign up successful")
                         // add user default values to firestore
                         registerUser()
-
-                        // go to intro activity
-                        val intent = Intent(this, IntroActivity::class.java)
-                        startActivity(intent)
-                        finish()
                     } else {
                         hideProgressBar()
                         // If sign up fails
@@ -262,58 +227,36 @@ open class BaseClass : AppCompatActivity() {
 
     private fun registerUser() {
         try {
-            fireStore = Firebase.firestore
+            auth = FirebaseAuth.getInstance()
+            fireStore = FirebaseFirestore.getInstance()
 
-            // set uid from firebase auth
-            userBasicInfo.setUID(getCurrentUserID())
-            userMeasurements.setUID(getCurrentUserID())
+            // Create a new document with a generated ID
+            val userDocRef = fireStore.collection("users").document()
 
-            // Creating user basic info document
-            val userBasicInfoMap = hashMapOf(
-                "uid" to userBasicInfo.getUID(),
-                "gender" to userBasicInfo.getGender(),
-                "age" to userBasicInfo.getAge(),
-                "height" to userBasicInfo.getHeight(),
-                "goal" to userBasicInfo.getGoal(),
-                "startWeight" to userBasicInfo.getStartWeight(),
-                "startBMI" to userBasicInfo.getStartBMI(),
-                "startCircumference" to userBasicInfo.getStartCircumference(),
-                "startBodyFat" to userBasicInfo.getStartBodyFat(),
-                "startImage" to userBasicInfo.getStartImage(),
-                "date" to userBasicInfo.getDate(),
-            )
-            println(userBasicInfoMap)
-
-            fireStore.collection("userBasicInfo")
-                .add(userBasicInfoMap)
-                .addOnSuccessListener {
-                    println("User basic info added successfully")
-                }
-                .addOnFailureListener {
-                    println("Error: ${it.message}")
-                }
-
-            // Creating user measurements document
-            val userMeasurementsMap = hashMapOf(
-                "uid" to userMeasurements.getUID(),
-                "weight" to userMeasurements.getWeight(),
-                "bmi" to userMeasurements.getBMI(),
-                "circumference" to userMeasurements.getCircumference(),
-                "bodyFat" to userMeasurements.getBodyFat(),
-                "date" to userMeasurements.getDate(),
+            // Create a user object with some example data
+            val user = hashMapOf(
+                "uid" to getCurrentUserID(),
+                "name" to "John Smith",
+                "email" to "john.smith@example.com",
+                "age" to 30,
+                "height" to 170.0,
+                "goal" to 70.0,
+                "startWeight" to 80.0
             )
 
-            println(userMeasurementsMap)
-            fireStore.collection("userMeasurements")
-                .add(userMeasurementsMap)
+            // Add the user object to the document
+            userDocRef.set(user)
                 .addOnSuccessListener {
-                    println("User measurements added successfully")
-                    userRegisteredSuccess()
+                    // The document was successfully written
+                    println("DocumentSnapshot written with ID: ${userDocRef.id}")
                 }
-                .addOnFailureListener {
-                    println("Error: ${it.message}")
-                    userRegisteredFailed()
+                .addOnFailureListener { e ->
+                    // There was an error writing the document
+                    println("Error adding document: $e")
                 }
+
+            // You can add more collections and documents here as needed
+
         } catch (e: Exception) {
             println("Error: ${e.message}")
         } finally {

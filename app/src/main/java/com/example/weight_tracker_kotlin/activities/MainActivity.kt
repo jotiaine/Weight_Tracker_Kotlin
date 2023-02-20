@@ -10,6 +10,7 @@ import com.example.weight_tracker_kotlin.fragments.AccountFragment
 import com.example.weight_tracker_kotlin.fragments.HomeFragment
 import com.example.weight_tracker_kotlin.fragments.StatisticFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 
 class MainActivity : BaseClass() {
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -22,6 +23,8 @@ class MainActivity : BaseClass() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        FirebaseApp.initializeApp(this)
 
         supportActionBar?.hide() // hide action bar
         // full screen
