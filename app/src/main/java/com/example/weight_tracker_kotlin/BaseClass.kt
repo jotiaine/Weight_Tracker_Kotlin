@@ -178,10 +178,14 @@ open class BaseClass : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentUserID(): String {
-        return FirebaseAuth.getInstance().currentUser?.uid.toString()
+    protected fun getCurrentUserID(): String {
+        var currentUser = FirebaseAuth.getInstance().currentUser
+        var currentUserID = ""
+        if (currentUser != null) {
+            currentUserID = currentUser.uid
+        }
+        return currentUserID
     }
-
 
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {
         try {
@@ -265,31 +269,6 @@ open class BaseClass : AppCompatActivity() {
         }
     }
 
-
-    private fun userRegisteredSuccess() {
-        if (!isFinishing) {
-            AlertDialog.Builder(this)
-                .setTitle("Success")
-                .setMessage("User registration success")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
-    }
-
-    private fun userRegisteredFailed() {
-        if (!isFinishing) {
-            AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage("User registered failed")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
-    }
-
     protected fun signIn(signInUsernameText: String, signInPasswordText: String) {
         try {
             auth = FirebaseAuth.getInstance() // get instance of firebase auth
@@ -338,7 +317,9 @@ open class BaseClass : AppCompatActivity() {
         }
     }
 
-
+    /*******************
+     * Loading Dialog, Alerts, Toasts & errors
+     *******************/
     private fun showProgressBar() {
         // Show loading from res/layout/loading.xml
         loadingDialog = AlertDialog.Builder(this)
@@ -352,5 +333,29 @@ open class BaseClass : AppCompatActivity() {
 
     private fun hideProgressBar() {
         loadingDialog.dismiss()
+    }
+
+    private fun userRegisteredSuccess() {
+        if (!isFinishing) {
+            AlertDialog.Builder(this)
+                .setTitle("Success")
+                .setMessage("User registration success")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+
+    private fun userRegisteredFailed() {
+        if (!isFinishing) {
+            AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage("User registered failed")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 }

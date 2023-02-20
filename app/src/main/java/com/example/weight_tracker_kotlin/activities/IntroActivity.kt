@@ -16,6 +16,15 @@ class IntroActivity : BaseClass() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
+        // Check if currentUser exists the go to main directly
+        // Automatic login
+        var currentUserID = getCurrentUserID()
+        if (currentUserID.isNotEmpty()) {
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         supportActionBar?.hide() // hide action bar
         // full screen
         window.setFlags(
