@@ -1,14 +1,16 @@
 package com.example.weight_tracker_kotlin
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weight_tracker_kotlin.activities.IntroActivity
 import com.example.weight_tracker_kotlin.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 open class BaseClass : AppCompatActivity() {
-    private var fireStore = FirebaseFirestore.getInstance() // Firebase Firestore
+    private val fireStore = FirebaseFirestore.getInstance() // Firebase Firestore
     private lateinit var auth: FirebaseAuth // Firebase Auth
     private lateinit var userBasicInfo: UserBasicInfo
     private lateinit var userMeasurements: UserMeasurements
@@ -189,82 +191,85 @@ open class BaseClass : AppCompatActivity() {
 
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {
         try {
-            // if auth is not initialized, initialize it
+            // Show loading dialog
+            showProgressBar()
+
             auth = FirebaseAuth.getInstance()
             userBasicInfo = UserBasicInfo()
             userMeasurements = UserMeasurements()
-
-            // Show loading dialog
-            showProgressBar()
 
             auth.createUserWithEmailAndPassword(
                 signUpUsernameText,
                 signUpPasswordText
             )
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        println("Sign up successful")
-                        // add user default values to firestore
-                        registerUser()
-                    } else {
-                        hideProgressBar()
-                        // If sign up fails
-                        println("Sign up failed: ${task.exception?.message}")
-                        if (!isFinishing) {
-                            AlertDialog.Builder(this)
-                                .setTitle("Error")
-                                .setMessage("User registration failed")
-                                .setPositiveButton("OK") { dialog, _ ->
-                                    dialog.dismiss()
+                .addOnSuccessListener {
+                    hideProgressBar()
+
+                    userBasicInfo.setUID(auth.currentUser!!.uid)
+                    userMeasurements.setUID(auth.currentUser!!.uid)
+
+                    val UID = getCurrentUserID()
+
+                    println("Sign up successful")
+                    // add user default values to firestore
+                    val userBasicInfoMap = hashMapOf(
+                        "uid" to userBasicInfo.getUID(),
+                        "gender" to userBasicInfo.getGender(),
+                        "age" to userBasicInfo.getAge(),
+                        "height" to userBasicInfo.getHeight(),
+                        "goal" to userBasicInfo.getGoal(),
+                        "startWeight" to userBasicInfo.getStartWeight(),
+                        "date" to userBasicInfo.getDate(),
+                        "startImage" to userBasicInfo.getStartImage(),
+                        "startBMI" to userBasicInfo.getStartBMI(),
+                        "startCircumference" to userBasicInfo.getStartCircumference(),
+                        "startBodyFat" to userBasicInfo.getStartBodyFat()
+                    )
+
+                    val userMeasurementsMap = hashMapOf(
+                        "uid" to userMeasurements.getUID(),
+                        "weight" to userMeasurements.getWeight(),
+                        "bmi" to userMeasurements.getBMI(),
+                        "circumference" to userMeasurements.getCircumference(),
+                        "bodyFat" to userMeasurements.getBodyFat(),
+                        "date" to userMeasurements.getDate()
+                    )
+
+                    // Add the userBasicInfo to firestore
+                    fireStore.collection("userBasicInfo")
+                        .document(UID)
+                        .set(userBasicInfo)
+                        .addOnSuccessListener {
+                            // add the userMeasurements to firestore
+                            fireStore.collection("userMeasurements")
+                                .document(UID)
+                                .set(userMeasurements)
+                                .addOnSuccessListener {
+                                    // go to intro screen
+                                    Intent(this, IntroActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
                                 }
-                                .show()
+                                .addOnFailureListener {
+                                    println("test collection failed")
+                                    Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show()
+                                }
                         }
-                    }
+                        .addOnFailureListener {
+                            println("test collection failed")
+                            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                        }
+                }
+                .addOnFailureListener {
+                    hideProgressBar()
+                    println("Sign up failed")
+                    Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show()
                 }
 
         } catch (e: Exception) {
             println("Error: ${e.message}")
         } finally {
             println("Sign up complete")
-        }
-    }
-
-    private fun registerUser() {
-        try {
-            auth = FirebaseAuth.getInstance()
-            fireStore = FirebaseFirestore.getInstance()
-
-            // Create a new document with a generated ID
-            val userDocRef = fireStore.collection("users").document()
-
-            // Create a user object with some example data
-            val user = hashMapOf(
-                "uid" to getCurrentUserID(),
-                "name" to "John Smith",
-                "email" to "john.smith@example.com",
-                "age" to 30,
-                "height" to 170.0,
-                "goal" to 70.0,
-                "startWeight" to 80.0
-            )
-
-            // Add the user object to the document
-            userDocRef.set(user)
-                .addOnSuccessListener {
-                    // The document was successfully written
-                    println("DocumentSnapshot written with ID: ${userDocRef.id}")
-                }
-                .addOnFailureListener { e ->
-                    // There was an error writing the document
-                    println("Error adding document: $e")
-                }
-
-            // You can add more collections and documents here as needed
-
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-        } finally {
-            println("User registration complete")
             auth.signOut()
         }
     }
@@ -316,6 +321,7 @@ open class BaseClass : AppCompatActivity() {
             auth.signOut()
         }
     }
+
 
     /*******************
      * Loading Dialog, Alerts, Toasts & errors

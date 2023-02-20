@@ -16,7 +16,7 @@ class IntroActivity : BaseClass() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        // Check if currentUser exists the go to main directly
+        // Check if currentUser exists then go to main directly
         // Automatic login
         var currentUserID = getCurrentUserID()
         if (currentUserID.isNotEmpty()) {
