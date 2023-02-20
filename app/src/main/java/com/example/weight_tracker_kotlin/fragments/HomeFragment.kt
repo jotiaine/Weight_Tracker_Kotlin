@@ -5,28 +5,77 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.weight_tracker_kotlin.R
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var client: OkHttpClient
+    private lateinit var baseUrl: String
+    private lateinit var token: String
+    private lateinit var url: String
+    private lateinit var apiKey: String
+    private lateinit var host: String
+    private lateinit var txvMotivationQuote: TextView
+    private lateinit var motivationText: String
+    private lateinit var author: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+//    GET /quote?token=ipworld.info HTTP/1.1
+//    X-Rapidapi-Key: dd6792186dmsh76cb74ea31ac68ap1fd6f6jsna1fcd0a2c466
+//    X-Rapidapi-Host: quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com
+//    Host: quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com
+
+    private fun getMotivationQuote() {
+        try {
+//            client = OkHttpClient()
+//            baseUrl = "https://quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com/"
+//            host = "quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com"
+//            apiKey = "dd6792186dmsh76cb74ea31ac68ap1fd6f6jsna1fcd0a2c466"
+//            token = "quote?token=ipworld.info"
+//            url = "$baseUrl$token"
+//            val request = Request.Builder()
+//                .url(url)
+//                .get()
+//                .addHeader("X-RapidAPI-Key", apiKey)
+//                .addHeader("X-RapidAPI-Host", host)
+//                .build()
+//
+//            val response = client.newCall(request).execute()
+
+            println("api call started")
+            client = OkHttpClient()
+
+            val request = Request.Builder()
+                .url("")
+                .get()
+                .build()
+
+            val response = client.newCall(request).execute()
+            println(response)
+            println(response.body?.string())
+            println(url)
+            println(baseUrl)
+            println(token)
+            if (!response.isSuccessful) {
+                println("not working")
+            } else {
+                val body = response.body?.string()
+                val json = body?.let { JSONObject(it) }
+                motivationText = json?.getString("text").toString()
+                author = json?.getString("author").toString()
+                println("api call success")
+                println(motivationText)
+                println(author)
+            }
+        } catch (e: Exception) {
+            motivationText = "Loading..."
+            author = "Unknown"
+            println(e.message)
+        } finally {
+            println("Quote api call finished")
         }
     }
 
@@ -34,27 +83,14 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        txvMotivationQuote = view.findViewById(R.id.txvMotivationQuote)
+
+        // Get motivation data
+        getMotivationQuote()
+        txvMotivationQuote.text = "$motivationText - $author"
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

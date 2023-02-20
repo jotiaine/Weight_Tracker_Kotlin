@@ -1,9 +1,7 @@
 package com.example.weight_tracker_kotlin.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.weight_tracker_kotlin.R
@@ -14,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : BaseClass() {
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var frameLayout: FrameLayout
     private lateinit var homeFragment: HomeFragment
     private lateinit var statisticFragment: StatisticFragment
     private lateinit var accountFragment: AccountFragment
@@ -32,7 +29,6 @@ class MainActivity : BaseClass() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        frameLayout = findViewById(R.id.frame_layout)
         fragmentManager = supportFragmentManager
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
@@ -40,31 +36,41 @@ class MainActivity : BaseClass() {
         if (savedInstanceState == null) {
             homeFragment = HomeFragment()
             fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.frame_layout, homeFragment)
+            fragmentTransaction.replace(R.id.frHome, homeFragment)
             fragmentTransaction.commit()
         }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
+            // Remove all fragments first
+            fragmentTransaction = fragmentManager.beginTransaction()
+            for (fragment in fragmentManager.fragments) {
+                fragmentTransaction.remove(fragment)
+            }
+            fragmentTransaction.commit()
+
             when (item.itemId) {
                 R.id.home -> {
                     homeFragment = HomeFragment()
                     fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.frame_layout, homeFragment)
+                    fragmentTransaction.replace(R.id.frHome, homeFragment)
                     fragmentTransaction.commit()
+
                     true
                 }
                 R.id.stats -> {
                     statisticFragment = StatisticFragment()
                     fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.frame_layout, statisticFragment)
+                    fragmentTransaction.replace(R.id.frStatistic, statisticFragment)
                     fragmentTransaction.commit()
+
                     true
                 }
                 R.id.account -> {
                     accountFragment = AccountFragment()
                     fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.frame_layout, accountFragment)
+                    fragmentTransaction.replace(R.id.frAccount, accountFragment)
                     fragmentTransaction.commit()
+
                     true
                 }
                 else -> false

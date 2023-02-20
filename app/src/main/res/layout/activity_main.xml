@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,43 +9,50 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:contentDescription="vertical scrollable"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:contentDescription="vertical scrollable">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:gravity="center"
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/frame_layout"
+                android:id="@+id/frHome"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
             </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frStatistic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:minHeight="670dp">
+
+            </FrameLayout>
+
         </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/gradient_background_drawable"
         app:itemIconSize="26dp"
         app:itemIconTint="@drawable/bottom_nav_icon_color"
         app:itemTextColor="@drawable/bottom_nav_icon_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav">
+        app:menu="@menu/bottom_nav"/>
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

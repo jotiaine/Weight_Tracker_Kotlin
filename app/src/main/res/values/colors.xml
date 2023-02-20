@@ -19,5 +19,6 @@
     <color name="bottom_nav_icon_unselected">@color/white </color>
     <color name="bottom_nav_text_color_unselected">@color/white</color>
 
-
+    <!--  Grayish colors  -->
+    <color name="custom_light_gray">#616161</color>
 </resources>
