@@ -1,17 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".fragments.FirstInputFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:text="First Input Fragment"
-        android:textSize="20sp" />
 
-</LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/custom_light_gray">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="first input fragment img"
+                        android:src="@drawable/baseline_start_24" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:text="This is the first step"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:id="@+id/llInputFields"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:id="@+id/llStartWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imvStartWeight"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="start weight img"
+                                android:src="@drawable/baseline_monitor_weight_24" />
+
+                            <EditText
+                                android:id="@+id/edtStartWeight"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:hint="start weight"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llTargetWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imvTargetWeight"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="target weight img"
+                                android:src="@drawable/baseline_task_alt_24" />
+
+                            <EditText
+                                android:id="@+id/edtTargetWeight"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:hint="target weight"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llHeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView5"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="height img"
+                                android:src="@drawable/baseline_height_24" />
+
+                            <EditText
+                                android:id="@+id/edtHeight"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:hint="height"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llStartCircumference"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imvStartCircumference"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="start circumference img"
+                                android:src="@drawable/baseline_replay_circle_filled_24" />
+
+                            <EditText
+                                android:id="@+id/edtStartCircumference"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:hint="start circumference"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llStartBMI"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imvStartBMI"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="start bmi img"
+                                android:src="@drawable/baseline_numbers_24" />
+
+                            <EditText
+                                android:id="@+id/edtStartBMI"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:hint="start bmi"
+                                android:inputType="none"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llStartImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:backgroundTint="@color/white"
+                                android:contentDescription="upload image btn"
+                                android:minHeight="48dp"
+                                android:src="@drawable/baseline_image_24" />
+
+                            <TextView
+                                android:id="@+id/txvUploadImageText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.85"
+                                android:gravity="center"
+                                android:text="Upload start image"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txvOptional"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:text="Optional"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:id="@+id/llAge"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imvAge"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="age img"
+                                android:src="@drawable/baseline_info_24" />
+
+                            <EditText
+                                android:id="@+id/edtAge"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:gravity="center_vertical"
+                                android:hint="age"
+                                android:inputType="number"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imvGender"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.15"
+                                android:contentDescription="gender img"
+                                android:src="@drawable/baseline_info_24" />
+
+                            <EditText
+                                android:id="@+id/edtGender"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.85"
+                                android:ems="10"
+                                android:gravity="center_vertical"
+                                android:hint="gender"
+                                android:inputType="text|textAutoComplete"
+                                android:minHeight="48dp"
+                                android:textColor="@color/white"
+                                android:textColorHint="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSaveFirstInputFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:backgroundTint="@color/custom_light_blue_color"
+                        android:text="Save" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+</ScrollView>
