@@ -2,11 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/first_input_fragment_root_layout"
+    android:id="@+id/daily_input_fragment_root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".fragments.FirstInputFragment">
+    tools:context=".fragments.FirstInputFragment"
+    >
 
 
     <LinearLayout
@@ -55,7 +56,7 @@
                     android:textSize="16sp" />
 
                 <LinearLayout
-                    android:id="@+id/llInputFields"
+                    android:id="@+id/llDailyInputFields"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"

@@ -1,17 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/weekly_input_fragment_root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".fragments.WeeklyInputFragment">
+    tools:context=".fragments.FirstInputFragment">
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:text="Weekly Input Fragment"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:backgroundTint="@color/custom_light_gray"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="first input fragment img"
+                    android:src="@drawable/baseline_task_alt_80" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Time to complete this week"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="&quot;Process is an end itself.&quot;"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp" />
+
+
+                <LinearLayout
+                    android:id="@+id/llWeeklyInputFields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/llWeeklyWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imvWeeklyWeight"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.15"
+                            android:contentDescription="weekly weight img"
+                            android:src="@drawable/baseline_monitor_weight_24" />
+
+                        <EditText
+                            android:id="@+id/edtWeeklyWeight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.85"
+                            android:ems="10"
+                            android:hint="weight"
+                            android:inputType="numberDecimal"
+                            android:minHeight="48dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llWeeklyCircumference"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imvWeeklyCircumference"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.15"
+                            android:contentDescription="weekly circumference img"
+                            android:src="@drawable/baseline_replay_circle_filled_24" />
+
+                        <EditText
+                            android:id="@+id/edtWeeklyCircumference"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.85"
+                            android:ems="10"
+                            android:hint="circumference"
+                            android:inputType="numberDecimal"
+                            android:minHeight="48dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llWeeklyBMI"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imvWeeklyBMI"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.15"
+                            android:contentDescription="weekly bmi img"
+                            android:src="@drawable/baseline_numbers_24" />
+
+                        <EditText
+                            android:id="@+id/edtWeeklyBMI"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.85"
+                            android:ems="10"
+                            android:focusable="false"
+                            android:gravity="center_vertical"
+                            android:hint="bmi"
+                            android:inputType="none"
+                            android:minHeight="48dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llWeeklyImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/imbWeeklyImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.85"
+                            android:backgroundTint="@color/custom_light_gray"
+                            android:contentDescription="upload image btn"
+                            android:minHeight="48dp"
+                            android:src="@drawable/baseline_image_24" />
+
+                        <TextView
+                            android:id="@+id/txvUploadImageTextWeeklyFrag"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.85"
+                            android:gravity="center"
+                            android:text="Upload weekly image"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txvOptionalWeeklyFrag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:text="Optional"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:id="@+id/llWeeklyBodyFat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imvStartBodyFat"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.15"
+                            android:contentDescription="weekly body fat img"
+                            android:src="@drawable/baseline_info_24" />
+
+                        <EditText
+                            android:id="@+id/edtWeeklyBodyFat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.85"
+                            android:ems="10"
+                            android:gravity="center_vertical"
+                            android:hint="weekly bodyfat"
+                            android:inputType="numberDecimal"
+                            android:minHeight="48dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSaveWeeklyInputFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="@color/custom_light_blue_color"
+                    android:text="Save" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</ScrollView>
