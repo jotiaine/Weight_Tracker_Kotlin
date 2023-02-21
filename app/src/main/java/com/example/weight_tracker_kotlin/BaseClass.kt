@@ -1,10 +1,10 @@
 package com.example.weight_tracker_kotlin
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weight_tracker_kotlin.activities.IntroActivity
 import com.example.weight_tracker_kotlin.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -203,8 +203,6 @@ open class BaseClass : AppCompatActivity() {
                 signUpPasswordText
             )
                 .addOnSuccessListener {
-                    hideProgressBar()
-
                     userBasicInfo.setUID(auth.currentUser!!.uid)
                     userMeasurements.setUID(auth.currentUser!!.uid)
 
@@ -240,36 +238,35 @@ open class BaseClass : AppCompatActivity() {
                         .document(UID)
                         .set(userBasicInfo)
                         .addOnSuccessListener {
-                            // add the userMeasurements to firestore
-                            fireStore.collection("userMeasurements")
-                                .document(UID)
-                                .set(userMeasurements)
-                                .addOnSuccessListener {
-                                    // go to intro screen
-                                    Intent(this, IntroActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                }
-                                .addOnFailureListener {
-                                    println("test collection failed")
-                                    Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show()
-                                }
+                            Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT)
+                                .show()
                         }
                         .addOnFailureListener {
-                            println("test collection failed")
                             Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
                         }
+
+                    // add the userMeasurements to firestore
+                    fireStore.collection("userMeasurements")
+                        .document(UID)
+                        .set(userMeasurements)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                    hideProgressBar()
                 }
                 .addOnFailureListener {
                     hideProgressBar()
-                    println("Sign up failed")
                     Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show()
                 }
-
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            Log.e("Error", e.message.toString())
         } finally {
-            println("Sign up complete")
             auth.signOut()
         }
     }

@@ -18,14 +18,19 @@ class SignUpActivity : BaseClass() {
     private lateinit var intent: Intent
 
     private fun validateSignUp() {
-         when {
+        when {
             signUpUsernameText.text.toString().isEmpty() -> {
                 Toast.makeText(this, "Please enter username", Toast.LENGTH_SHORT).show()
             }
             signUpPasswordText.text.toString().isEmpty() -> {
                 Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show()
             }
-            else -> signUp(signUpUsernameText.text.toString().trim(), signUpPasswordText.text.toString().trim())
+            else -> {
+                signUp(
+                    signUpUsernameText.text.toString().trim(),
+                    signUpPasswordText.text.toString().trim()
+                )
+            }
         }
     }
 
@@ -62,6 +67,7 @@ class SignUpActivity : BaseClass() {
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
             validateSignUp()
             clearTextFields()
+//            goBackToIntroActivity()
         }
 
         // listening imbGoBack
