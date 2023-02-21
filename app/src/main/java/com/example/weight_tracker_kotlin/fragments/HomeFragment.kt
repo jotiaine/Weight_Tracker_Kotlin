@@ -8,13 +8,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.weight_tracker_kotlin.BaseClass
 import com.example.weight_tracker_kotlin.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
 
 class HomeFragment : Fragment() {
+    // Firebase
+    private lateinit var auth: FirebaseAuth
+    private lateinit var fireStore: FirebaseFirestore
     private lateinit var client: OkHttpClient
     private lateinit var baseUrl: String
     private lateinit var token: String
@@ -36,6 +42,67 @@ class HomeFragment : Fragment() {
 //    X-Rapidapi-Key: dd6792186dmsh76cb74ea31ac68ap1fd6f6jsna1fcd0a2c466
 //    X-Rapidapi-Host: quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com
 //    Host: quotes-inspirational-quotes-motivational-quotes.p.rapidapi.com
+
+    private fun showFirstInputFragment() {
+        auth = FirebaseAuth.getInstance()
+        fireStore = FirebaseFirestore.getInstance()
+        // if startWeight is 0.0 show firstInputFragment
+        // else hide firstInputFragment
+        val UID = auth.currentUser!!.uid
+        fireStore.collection("userBasicInfo")
+            .document(UID)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val startWeight = document.get("startWeight")
+                    val day = BaseClass().getDay()
+                    if (startWeight == 0.0) {
+                        fragmentManager = requireActivity().supportFragmentManager
+                        fragmentTransaction = fragmentManager.beginTransaction()
+                        firstInputFragment = FirstInputFragment()
+                        fragmentTransaction.replace(R.id.frInputFragments, firstInputFragment)
+                        fragmentTransaction.commit()
+                    } else {
+                        // if it is not Sunday show dailyInputFragment
+                        // if already exist data on today, hide dailyInputFragment
+                        if (day != "Sunday") {
+                            showDailyInputFragment()
+                        } else {
+                            // else it is sunday -> show weeklyInputFragment
+                            // if already exist data on this day, hide dailyInputFragment
+                            showWeeklyInputFragment()
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun showDailyInputFragment() {
+        fireStore = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+
+//        val UID = auth.currentUser!!.uid
+//
+//        fireStore.collection("userMeasurements")
+//            .whereEqualTo("UID", UID)
+//            .get()
+//            .
+
+
+        fragmentManager = requireActivity().supportFragmentManager
+        fragmentTransaction = fragmentManager.beginTransaction()
+        dailyInputFragment = DailyInputFragment()
+        fragmentTransaction.replace(R.id.frInputFragments, dailyInputFragment)
+        fragmentTransaction.commit()
+    }
+
+    private fun showWeeklyInputFragment() {
+        fragmentManager = requireActivity().supportFragmentManager
+        fragmentTransaction = fragmentManager.beginTransaction()
+        weeklyInputFragment = WeeklyInputFragment()
+        fragmentTransaction.replace(R.id.frInputFragments, weeklyInputFragment)
+        fragmentTransaction.commit()
+    }
 
     private fun getMotivationQuote() {
         try {
@@ -91,35 +158,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showInputFragment() {
-        firstInputFragment = FirstInputFragment()
-        dailyInputFragment = DailyInputFragment()
-        weeklyInputFragment = WeeklyInputFragment()
-
-        fragmentManager = childFragmentManager
-        fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.frInputFragments, firstInputFragment)
-        fragmentTransaction.add(R.id.frInputFragments, dailyInputFragment)
-        fragmentTransaction.add(R.id.frInputFragments, weeklyInputFragment)
-        fragmentTransaction.commit()
-
-        // if startWeight is 0.0 show firstInputFragment
-        // else hide firstInputFragment
-
-        // if it is not Sunday show dailyInputFragment
-        // if already exist data on today, hide dailyInputFragment
-
-        // else it is sunday -> show weeklyInputFragment
-        // if already exist data on this day, hide dailyInputFragment
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        showInputFragment()
+        showFirstInputFragment()
         txvMotivationQuote = view.findViewById(R.id.txvMotivationQuote)
 
         // Get motivation data

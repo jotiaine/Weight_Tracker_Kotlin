@@ -205,6 +205,12 @@ open class BaseClass : AppCompatActivity() {
         return eet.toString()
     }
 
+    fun getDay(): String {
+        val now = LocalDateTime.now()
+        val eet = now.atZone(ZoneId.of("Europe/Helsinki"))
+        return eet.dayOfMonth.toString()
+    }
+
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {
         try {
             // Show loading dialog

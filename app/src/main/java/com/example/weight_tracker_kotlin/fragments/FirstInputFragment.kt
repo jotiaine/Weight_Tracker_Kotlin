@@ -31,7 +31,6 @@ class FirstInputFragment : Fragment() {
     private lateinit var edtAge: EditText
     private lateinit var edtGender: EditText
     private lateinit var edtStartBodyFat: EditText
-    private lateinit var loadingDialog: AlertDialog
 
     private fun uploadImage() {
         println("Uploading image")
