@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.weight_tracker_kotlin.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 open class BaseClass : AppCompatActivity() {
     private val fireStore = FirebaseFirestore.getInstance() // Firebase Firestore
@@ -197,6 +199,12 @@ open class BaseClass : AppCompatActivity() {
         return currentUserID
     }
 
+    fun getCurrentTimeStamp(): String {
+        val now = LocalDateTime.now()
+        val eet = now.atZone(ZoneId.of("Europe/Helsinki"))
+        return eet.toString()
+    }
+
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {
         try {
             // Show loading dialog
@@ -213,6 +221,7 @@ open class BaseClass : AppCompatActivity() {
                 .addOnSuccessListener {
                     userBasicInfo.setUID(auth.currentUser!!.uid)
                     userMeasurements.setUID(auth.currentUser!!.uid)
+                    userBasicInfo.setDate(getCurrentTimeStamp())
 
                     val UID = getCurrentUserID()
 
