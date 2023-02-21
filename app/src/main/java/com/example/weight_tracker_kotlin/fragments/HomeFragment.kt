@@ -53,42 +53,58 @@ class HomeFragment : Fragment() {
 //                .build()
 //
 //            val response = client.newCall(request).execute()
+//            val responseBody = response.body?.string()
+//            println(response)
+//            println(responseBody)
+//            println(response.code)
+//            println("api call started")
+//            client = OkHttpClient()
+//
+//            val request = Request.Builder()
+//                .url("")
+//                .get()
+//                .build()
+//
+//            val response = client.newCall(request).execute()
 
-            println("api call started")
-            client = OkHttpClient()
-
-            val request = Request.Builder()
-                .url("")
-                .get()
-                .build()
-
-            val response = client.newCall(request).execute()
-            println(response)
-            println(response.body?.string())
-            println(url)
-            println(baseUrl)
-            println(token)
-            if (!response.isSuccessful) {
-                println("not working")
-            } else {
-                val body = response.body?.string()
-                val json = body?.let { JSONObject(it) }
-                motivationText = json?.getString("text").toString()
-                author = json?.getString("author").toString()
-                println("api call success")
-                println(motivationText)
-                println(author)
-            }
+//            if (response.isSuccessful) {
+//                val json = JSONObject(responseBody)
+//                motivationText = json.getString("text")
+//                author = json.getString("author")
+//                println("api call success")
+//                println(motivationText)
+//                println(author)
+//            } else {
+//                println("API call failed")
+//                println(responseBody)
+//            }
+            println(motivationText)
+            println(author)
         } catch (e: Exception) {
             motivationText = "Loading..."
             author = "Unknown"
             println(e.message)
         } finally {
             println("Quote api call finished")
+            txvMotivationQuote.text = "$motivationText - $author"
+            println(txvMotivationQuote.text)
         }
     }
 
     private fun showInputFragment() {
+        firstInputFragment = FirstInputFragment()
+        dailyInputFragment = DailyInputFragment()
+        weeklyInputFragment = WeeklyInputFragment()
+
+
+        fragmentManager = childFragmentManager
+        fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.frInputFragments, firstInputFragment)
+        fragmentTransaction.add(R.id.frInputFragments, dailyInputFragment)
+        fragmentTransaction.add(R.id.frInputFragments, weeklyInputFragment)
+        fragmentTransaction.commit()
+
+
         // if startWeight is 0.0 show firstInputFragment
         // else hide firstInputFragment
 
@@ -104,11 +120,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        showInputFragment()
         txvMotivationQuote = view.findViewById(R.id.txvMotivationQuote)
 
         // Get motivation data
         getMotivationQuote()
-        txvMotivationQuote.text = "$motivationText - $author"
 
         return view
     }

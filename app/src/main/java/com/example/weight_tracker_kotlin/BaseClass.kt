@@ -126,8 +126,8 @@ open class BaseClass : AppCompatActivity() {
         private var bmi = 0.0 // default
         private var circumference = 0.0 // default
         private var bodyFat = 0.0 // default
+        private var image = "default" // default
         private var date = "default" // default
-
 
         // Setters
         fun setUID(uid: String) {
@@ -148,6 +148,10 @@ open class BaseClass : AppCompatActivity() {
 
         fun setBodyFat(bodyFat: Double) {
             this.bodyFat = bodyFat
+        }
+
+        fun setImage(image: String) {
+            this.image = image
         }
 
         fun setDate(date: String) {
@@ -173,6 +177,10 @@ open class BaseClass : AppCompatActivity() {
 
         fun getBodyFat(): Double {
             return bodyFat
+        }
+
+        fun getImage(): String {
+            return image
         }
 
         fun getDate(): String {
@@ -209,30 +217,6 @@ open class BaseClass : AppCompatActivity() {
                     val UID = getCurrentUserID()
 
                     println("Sign up successful")
-                    // add user default values to firestore
-                    val userBasicInfoMap = hashMapOf(
-                        "uid" to userBasicInfo.getUID(),
-                        "gender" to userBasicInfo.getGender(),
-                        "age" to userBasicInfo.getAge(),
-                        "height" to userBasicInfo.getHeight(),
-                        "goal" to userBasicInfo.getGoal(),
-                        "startWeight" to userBasicInfo.getStartWeight(),
-                        "date" to userBasicInfo.getDate(),
-                        "startImage" to userBasicInfo.getStartImage(),
-                        "startBMI" to userBasicInfo.getStartBMI(),
-                        "startCircumference" to userBasicInfo.getStartCircumference(),
-                        "startBodyFat" to userBasicInfo.getStartBodyFat()
-                    )
-
-                    val userMeasurementsMap = hashMapOf(
-                        "uid" to userMeasurements.getUID(),
-                        "weight" to userMeasurements.getWeight(),
-                        "bmi" to userMeasurements.getBMI(),
-                        "circumference" to userMeasurements.getCircumference(),
-                        "bodyFat" to userMeasurements.getBodyFat(),
-                        "date" to userMeasurements.getDate()
-                    )
-
                     // Add the userBasicInfo to firestore
                     fireStore.collection("userBasicInfo")
                         .document(UID)
