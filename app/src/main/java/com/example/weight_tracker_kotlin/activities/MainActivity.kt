@@ -27,7 +27,6 @@ class MainActivity : BaseClass() {
 
         FirebaseApp.initializeApp(this)
 
-        supportActionBar?.hide() // hide action bar
         // full screen
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,

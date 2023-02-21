@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     /* Styles here */
+    <item name="fontFamily" type="font">@font/roboto</item>
 </resources>

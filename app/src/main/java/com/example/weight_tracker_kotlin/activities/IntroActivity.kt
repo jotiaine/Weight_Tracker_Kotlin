@@ -25,7 +25,6 @@ class IntroActivity : BaseClass() {
             finish()
         }
 
-        supportActionBar?.hide() // hide action bar
         // full screen
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,

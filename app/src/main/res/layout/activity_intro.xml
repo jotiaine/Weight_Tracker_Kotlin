@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:gravity="center"
@@ -23,12 +23,14 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="Logo img"
             app:srcCompat="@drawable/logo_icon" />
 
         <TextView
             android:id="@+id/logoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="@string/weightStepsLogoText"
             android:textColor="@color/btn_custom_font_color"
             android:textSize="48sp"
@@ -45,22 +47,22 @@
 
         <Button
             android:id="@+id/btnSignInActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="@color/custom_light_blue_color"
             android:fontFamily="@font/roboto_medium"
-            android:minWidth="160dp"
             android:text="@string/signInBtnText"
-            android:textColor="@color/white"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnSignUpActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minWidth="160dp"
+            android:backgroundTint="@color/custom_light_blue_color"
             android:text="@string/signUpBtnTextActivity"
-            android:textColor="@color/white"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
     </LinearLayout>

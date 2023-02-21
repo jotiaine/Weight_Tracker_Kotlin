@@ -96,14 +96,12 @@ class HomeFragment : Fragment() {
         dailyInputFragment = DailyInputFragment()
         weeklyInputFragment = WeeklyInputFragment()
 
-
         fragmentManager = childFragmentManager
         fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.frInputFragments, firstInputFragment)
         fragmentTransaction.add(R.id.frInputFragments, dailyInputFragment)
         fragmentTransaction.add(R.id.frInputFragments, weeklyInputFragment)
         fragmentTransaction.commit()
-
 
         // if startWeight is 0.0 show firstInputFragment
         // else hide firstInputFragment

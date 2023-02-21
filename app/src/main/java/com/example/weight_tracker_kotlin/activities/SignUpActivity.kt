@@ -51,7 +51,6 @@ class SignUpActivity : BaseClass() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        supportActionBar?.hide() // hide action bar
         // full screen
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,

@@ -47,12 +47,11 @@ class SignInActivity : BaseClass() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        supportActionBar?.hide() // hide action bar
-        // full screen
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+//        // full screen
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//            WindowManager.LayoutParams.FLAG_FULLSCREEN
+//        )
 
         txvForgotPassword =
             findViewById(R.id.txvForgotPassword) // forgot password textview in sign in activity xml
