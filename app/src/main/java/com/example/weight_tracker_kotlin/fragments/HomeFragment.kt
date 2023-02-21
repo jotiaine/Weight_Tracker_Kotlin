@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.weight_tracker_kotlin.R
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -22,6 +24,13 @@ class HomeFragment : Fragment() {
     private lateinit var txvMotivationQuote: TextView
     private lateinit var motivationText: String
     private lateinit var author: String
+
+    // input fragments
+    private lateinit var fragmentManager: FragmentManager
+    private lateinit var fragmentTransaction: FragmentTransaction
+    private lateinit var firstInputFragment: FirstInputFragment
+    private lateinit var dailyInputFragment: DailyInputFragment
+    private lateinit var weeklyInputFragment: WeeklyInputFragment
 
 //    GET /quote?token=ipworld.info HTTP/1.1
 //    X-Rapidapi-Key: dd6792186dmsh76cb74ea31ac68ap1fd6f6jsna1fcd0a2c466
@@ -77,6 +86,17 @@ class HomeFragment : Fragment() {
         } finally {
             println("Quote api call finished")
         }
+    }
+
+    private fun showInputFragment() {
+        // if startWeight is 0.0 show firstInputFragment
+        // else hide firstInputFragment
+
+        // if it is not Sunday show dailyInputFragment
+        // if already exist data on today, hide dailyInputFragment
+
+        // else it is sunday -> show weeklyInputFragment
+        // if already exist data on this day, hide dailyInputFragment
     }
 
     override fun onCreateView(
