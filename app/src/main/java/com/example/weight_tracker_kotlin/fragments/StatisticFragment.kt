@@ -1,18 +1,14 @@
 package com.example.weight_tracker_kotlin.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import com.example.weight_tracker_kotlin.BaseClassFragment
 import com.example.weight_tracker_kotlin.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
-class StatisticFragment : Fragment() {
-    private lateinit var fireStore: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
+class StatisticFragment : BaseClassFragment() {
     private lateinit var weightCircularProgressBar: ProgressBar
 
     override fun onCreateView(

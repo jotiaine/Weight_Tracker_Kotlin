@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -25,6 +26,7 @@ open class BaseClassFragment : Fragment() {
     private lateinit var dailyInputFragment: DailyInputFragment
     private lateinit var weeklyInputFragment: WeeklyInputFragment
     private lateinit var noInputsFragment: NoInputsFragment
+    private lateinit var loadingDialog: AlertDialog
 
     // RapidAPI
     private lateinit var motivationText: String
@@ -464,8 +466,100 @@ open class BaseClassFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         } finally {
-           Log.d("TAG", "saveWeeklyFragmentInputs: finally")
+            Log.d("TAG", "saveWeeklyFragmentInputs: finally")
         }
+    }
+
+    protected fun deleteUserData() {
+        try {
+            fireStore = FirebaseFirestore.getInstance()
+            auth = FirebaseAuth.getInstance()
+
+            val UID = auth.currentUser!!.uid
+
+            // Delete user data
+            fireStore.collection("userBasicInfo").whereEqualTo("uid", UID).get()
+                .addOnSuccessListener { snapshot ->
+                    // Iterate through the query results and delete each document
+                    snapshot.documents.forEach { document ->
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                // Document deleted
+                                println("Document deleted: ${document.id}")
+                            }
+                            .addOnFailureListener {
+                                // Document not deleted
+                                println("Document not deleted: ${document.id}")
+                            }
+                    }
+                }
+                .addOnFailureListener {
+                    // User data not deleted
+                    println("userBasicInfo not deleted")
+                }
+
+            fireStore.collection("userMeasurements").whereEqualTo("uid", UID).get()
+                .addOnSuccessListener { snapshot ->
+                    // Iterate through the query results and delete each document
+                    snapshot.documents.forEach { document ->
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                // Document deleted
+                                println("Document deleted: ${document.id}")
+                            }
+                            .addOnFailureListener {
+                                // Document not deleted
+                                println("Document not deleted: ${document.id}")
+                            }
+                    }
+                }
+                .addOnFailureListener {
+                    // User data not deleted
+                    println("userMeasurements not deleted")
+                }
+        } catch (e: Exception) {
+            // User data not deleted
+            println("User data not deleted")
+        } finally {
+            // User data deleted
+            println("User data deleted completed")
+        }
+    }
+
+    protected fun deleteAccount(): Boolean {
+        try {
+            auth = FirebaseAuth.getInstance()
+
+            // Delete account
+            auth.currentUser?.delete()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Account deleted
+                    println("Account deleted")
+                    Toast.makeText(context, "Account deleted", Toast.LENGTH_SHORT).show()
+                    // Go to intro screen
+                } else {
+                    // Account not deleted
+                    println("Account not deleted")
+                    Toast.makeText(context, "Account not deleted", Toast.LENGTH_SHORT).show()
+                }
+            }
+            return true
+        } catch (e: Exception) {
+            // Account not deleted
+            println("Account not deleted")
+            Toast.makeText(context, "Account not deleted", Toast.LENGTH_SHORT).show()
+            return false
+        } finally {
+            // Account deleted
+            println("Account deleted completed")
+            auth.signOut()
+        }
+    }
+
+    protected fun logOut() {
+        auth = FirebaseAuth.getInstance()
+        // Log out
+        auth.signOut()
     }
 
 
@@ -528,5 +622,20 @@ open class BaseClassFragment : Fragment() {
             println("$motivationText - $author")
         }
         return "$motivationText - $author"
+    }
+
+    protected fun showProgressBar() {
+        // Show loading from res/layout/loading.xml
+        loadingDialog = AlertDialog.Builder(requireContext())
+            .setView(R.layout.loading)
+            .setCancelable(false)
+            .create()
+
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        loadingDialog.show()
+    }
+
+    protected fun hideProgressBar() {
+        loadingDialog.dismiss()
     }
 }
