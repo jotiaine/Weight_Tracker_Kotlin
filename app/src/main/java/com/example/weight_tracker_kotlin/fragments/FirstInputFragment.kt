@@ -2,7 +2,6 @@ package com.example.weight_tracker_kotlin.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
-import com.example.weight_tracker_kotlin.BaseClass
+import com.example.weight_tracker_kotlin.BaseClassFragment
 import com.example.weight_tracker_kotlin.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
-class FirstInputFragment : Fragment() {
-    // Firebase
-    private lateinit var auth: FirebaseAuth
-    private lateinit var fireStore: FirebaseFirestore
+class FirstInputFragment : BaseClassFragment() {
     private lateinit var btnSaveFirstInputFragment: Button
     private lateinit var imbAddStartImage: ImageButton
     private lateinit var edtStartWeight: EditText
@@ -69,7 +62,16 @@ class FirstInputFragment : Fragment() {
 
             else -> {
                 calculateBMI()
-                saveFirstFragmentInputs()
+                saveFirstFragmentInputs(
+                    edtStartWeight,
+                    edtTargetWeight,
+                    edtHeight,
+                    edtStartCircumference,
+                    edtStartBMI,
+                    edtAge,
+                    edtGender,
+                    edtStartBodyFat
+                )
             }
         }
     }
@@ -88,106 +90,6 @@ class FirstInputFragment : Fragment() {
             }
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
-        }
-    }
-
-    private fun saveFirstFragmentInputs() {
-        try {
-            fireStore = FirebaseFirestore.getInstance()
-            auth = FirebaseAuth.getInstance()
-
-            // validate inputs
-            val startWeight = if (edtStartWeight.text.toString().isNotEmpty()) {
-                edtStartWeight.text.toString().toDouble()
-            } else {
-                0.0
-            }
-
-            val targetWeight = if (edtTargetWeight.text.toString().isNotEmpty()) {
-                edtTargetWeight.text.toString().toDouble()
-            } else {
-                0.0
-            }
-            val height = if (edtHeight.text.toString().isNotEmpty()) {
-                edtHeight.text.toString().toDouble()
-            } else {
-                0.0
-            }
-            val startCircumference = if (edtStartCircumference.text.toString().isNotEmpty()) {
-                edtStartCircumference.text.toString().toDouble()
-            } else {
-                0.0
-            }
-            val startBMI = if (edtStartBMI.text.toString().isNotEmpty()) {
-                edtStartBMI.text.toString().toDouble()
-            } else {
-                0.0
-            }
-            val age = if (edtAge.text.toString().isNotEmpty()) {
-                edtAge.text.toString().toInt()
-            } else {
-                0
-            }
-            val gender = edtGender.text.toString().ifEmpty {
-                ""
-            }
-            val startBodyfat = if (edtStartBodyFat.text.toString().isNotEmpty()) {
-                edtStartBodyFat.text.toString().toDouble()
-            } else {
-                0.0
-            }
-
-            val UID = auth.currentUser!!.uid
-
-            val userBasicInfoMap = hashMapOf(
-                "uid" to UID,
-                "startWeight" to startWeight,
-                "targetWeight" to targetWeight,
-                "height" to height,
-                "startCircumference" to startCircumference,
-                "startBMI" to startBMI,
-                "age" to age,
-                "gender" to gender,
-                "startBodyfat" to startBodyfat,
-                "date" to BaseClass().getCurrentTimeStamp()
-            )
-
-            // update user data to firestore to userBasicInfo collection
-            fireStore.collection("userBasicInfo")
-                .document(UID)
-                .set(userBasicInfoMap)
-                .addOnSuccessListener {
-                    Log.d("Success", "userBasicInfo document successfully updated!")
-                    // hide firstInputFragment fade animation
-                    view?.findViewById<View>(R.id.first_input_fragment_root_layout)?.animate()
-                        ?.alpha(0f)?.setDuration(300)?.withEndAction {
-                        // remove the fragment from the fragment manager
-                        parentFragmentManager.beginTransaction().remove(this@FirstInputFragment)
-                            .commit()
-                    }
-                    Toast.makeText(
-                        requireContext(),
-                        "Successfully updated",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                .addOnFailureListener { e ->
-                    Log.w("Error", "Error updating userBasicInfo", e)
-                    Toast.makeText(
-                        requireContext(),
-                        "Error updating userBasicInfo",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-        } catch (e: Exception) {
-            Log.e("Error", e.message.toString())
-            Toast.makeText(
-                requireContext(),
-                "Error updating userBasicInfo",
-                Toast.LENGTH_SHORT
-            ).show()
-        } finally {
-            clearInputs()
         }
     }
 
@@ -240,6 +142,7 @@ class FirstInputFragment : Fragment() {
         btnSaveFirstInputFragment.setOnClickListener {
             try {
                 validateFirstFragmentInputs()
+                clearInputs()
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             }
