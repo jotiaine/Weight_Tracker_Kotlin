@@ -1,60 +1,140 @@
 package com.example.weight_tracker_kotlin.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import com.example.weight_tracker_kotlin.BaseClass
 import com.example.weight_tracker_kotlin.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DailyInputFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DailyInputFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // Firebase
+    private lateinit var auth: FirebaseAuth
+    private lateinit var fireStore: FirebaseFirestore
+    private lateinit var btnSaveDailyInputFragment: Button
+    private lateinit var edtDailyWeight: EditText
+    private lateinit var edtDailyCircumference: EditText
+    private lateinit var edtDailyBodyFat: EditText
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private fun validateDailyFragmentInputs() {
+        when {
+            edtDailyWeight.text.toString().isEmpty() -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Please enter your weight",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else -> {
+                saveDailyFragmentInputs()
+            }
         }
+    }
+
+    private fun saveDailyFragmentInputs() {
+        try {
+            fireStore = FirebaseFirestore.getInstance()
+            auth = FirebaseAuth.getInstance()
+
+            // validate inputs
+            val weight = if (edtDailyWeight.text.toString().isNotEmpty()) {
+                edtDailyWeight.text.toString().toDouble()
+            } else {
+                0.0
+            }
+
+            val circumference = if (edtDailyCircumference.text.toString().isNotEmpty()) {
+                edtDailyCircumference.text.toString().toDouble()
+            } else {
+                0.0
+            }
+
+            val bodyFat = if (edtDailyBodyFat.text.toString().isNotEmpty()) {
+                edtDailyBodyFat.text.toString().toDouble()
+            } else {
+                0.0
+            }
+
+            val UID = auth.currentUser!!.uid
+
+            val userMeasurementsMap = hashMapOf(
+                "uid" to UID,
+                "weight" to weight,
+                "circumference" to circumference,
+                "bodyFat" to bodyFat,
+                "inputType" to "daily",
+                "day" to BaseClass().getCurrentWeekday(),
+                "date" to BaseClass().getCurrentTimeStamp()
+            )
+
+            // update user data to firestore to userMeasurements collection
+            fireStore.collection("userMeasurements")
+                .document()
+                .set(userMeasurementsMap)
+                .addOnSuccessListener {
+                    Log.d("Success", "User measurements added")
+                    Toast.makeText(
+                        requireContext(),
+                        "User measurements added",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // hide dailyInputFragment fade animation
+                    view?.findViewById<View>(R.id.daily_input_fragment_root_layout)?.animate()
+                        ?.alpha(0f)?.setDuration(300)?.withEndAction {
+                            // remove the fragment from the fragment manager
+                            parentFragmentManager.beginTransaction().remove(this@DailyInputFragment)
+                                .commit()
+                        }
+                }
+                .addOnFailureListener {
+                    Log.e("Error", it.message.toString())
+                    Toast.makeText(
+                        requireContext(),
+                        "Error adding user measurements",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        } catch (e: Exception) {
+            Log.e("Error", e.message.toString())
+            Toast.makeText(
+                requireContext(),
+                "Error updating userMeasurements",
+                Toast.LENGTH_SHORT
+            ).show()
+        } finally {
+            clearInputs()
+        }
+    }
+
+    private fun clearInputs() {
+        edtDailyWeight.text.clear()
+        edtDailyCircumference.text.clear()
+        edtDailyBodyFat.text.clear()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_daily, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_daily, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DailyFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DailyInputFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        btnSaveDailyInputFragment = view.findViewById(R.id.btnSaveDailyInputFragment)
+        edtDailyWeight = view.findViewById(R.id.edtDailyWeight)
+        edtDailyCircumference = view.findViewById(R.id.edtDailyCircumference)
+        edtDailyBodyFat = view.findViewById(R.id.edtDailyBodyFat)
+
+        btnSaveDailyInputFragment.setOnClickListener {
+            validateDailyFragmentInputs()
+        }
+
+        return view
     }
 }

@@ -144,7 +144,7 @@
                             android:src="@drawable/baseline_info_24" />
 
                         <EditText
-                            android:id="@+id/edtStartBodyFat"
+                            android:id="@+id/edtDailyBodyFat"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.85"

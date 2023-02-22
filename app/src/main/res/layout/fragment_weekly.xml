@@ -118,35 +118,15 @@
                             android:textColorHint="@android:color/darker_gray" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/llWeeklyBMI"
+                    <TextView
+                        android:id="@+id/txvOptionalWeeklyFrag"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/imvWeeklyBMI"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.15"
-                            android:contentDescription="weekly bmi img"
-                            android:src="@drawable/baseline_numbers_24" />
-
-                        <EditText
-                            android:id="@+id/edtWeeklyBMI"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.85"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center_vertical"
-                            android:hint="bmi"
-                            android:inputType="none"
-                            android:minHeight="48dp"
-                            android:textColor="@color/white"
-                            android:textColorHint="@android:color/darker_gray" />
-                    </LinearLayout>
+                        android:gravity="center_vertical"
+                        android:text="Optional"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                     <LinearLayout
                         android:id="@+id/llWeeklyImage"
@@ -176,16 +156,6 @@
                             android:textSize="16sp" />
 
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/txvOptionalWeeklyFrag"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:gravity="center_vertical"
-                        android:text="Optional"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
 
                     <LinearLayout
                         android:id="@+id/llWeeklyBodyFat"

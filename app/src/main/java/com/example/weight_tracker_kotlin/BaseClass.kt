@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 open class BaseClass : AppCompatActivity() {
     private val fireStore = FirebaseFirestore.getInstance() // Firebase Firestore
@@ -201,14 +202,14 @@ open class BaseClass : AppCompatActivity() {
 
     fun getCurrentTimeStamp(): String {
         val now = LocalDateTime.now()
-        val eet = now.atZone(ZoneId.of("Europe/Helsinki"))
-        return eet.toString()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return now.format(formatter)
     }
 
-    fun getDay(): String {
+    fun getCurrentWeekday(): String {
         val now = LocalDateTime.now()
         val eet = now.atZone(ZoneId.of("Europe/Helsinki"))
-        return eet.dayOfMonth.toString()
+        return eet.dayOfWeek.toString()
     }
 
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {

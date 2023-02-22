@@ -73,27 +73,54 @@ class AccountFragment : Fragment() {
     }
 
     private fun deleteUserData() {
-        // Delete user data
-        db.collection("userBasicInfo").document(userID).delete()
-            .addOnSuccessListener {
-                // User data deleted
-                println("userBasicInfo deleted")
-            }
-            .addOnFailureListener {
-                // User data not deleted
-                println("userBasicInfo not deleted")
-            }
+        try {
+            // Delete user data
+            db.collection("userBasicInfo").whereEqualTo("uid", userID).get()
+                .addOnSuccessListener { snapshot ->
+                    // Iterate through the query results and delete each document
+                    snapshot.documents.forEach { document ->
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                // Document deleted
+                                println("Document deleted: ${document.id}")
+                            }
+                            .addOnFailureListener {
+                                // Document not deleted
+                                println("Document not deleted: ${document.id}")
+                            }
+                    }
+                }
+                .addOnFailureListener {
+                    // User data not deleted
+                    println("userBasicInfo not deleted")
+                }
 
-        db.collection("userMeasurements").document(userID).delete()
-            .addOnSuccessListener {
-                // User data deleted
-                println("userMeasurements deleted")
-            }
-            .addOnFailureListener {
-                // User data not deleted
-                println("userMeasurements not deleted")
-            }
-
+            db.collection("userMeasurements").whereEqualTo("uid", userID).get()
+                .addOnSuccessListener { snapshot ->
+                    // Iterate through the query results and delete each document
+                    snapshot.documents.forEach { document ->
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                // Document deleted
+                                println("Document deleted: ${document.id}")
+                            }
+                            .addOnFailureListener {
+                                // Document not deleted
+                                println("Document not deleted: ${document.id}")
+                            }
+                    }
+                }
+                .addOnFailureListener {
+                    // User data not deleted
+                    println("userMeasurements not deleted")
+                }
+        }   catch (e: Exception) {
+            // User data not deleted
+            println("User data not deleted")
+        } finally {
+            // User data deleted
+            println("User data deleted completed")
+        }
     }
 
     override fun onCreateView(
