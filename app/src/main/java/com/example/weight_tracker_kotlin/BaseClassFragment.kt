@@ -45,14 +45,17 @@ open class BaseClassFragment : Fragment() {
     //    "gender" to gender,
     //    "startBodyFat" to startBodyfat,
     //    "date" to BaseClass().getCurrentTimeStamp()
+    //    "startImage" to startImage
     private lateinit var userMeasurementsMap: MutableMap<String, Any>
     //    "uid" to UID,
     //    "weight" to weight,
+    //    "bmi" to bmi,
     //    "circumference" to circumference,
     //    "bodyFat" to bodyFat,
     //    "inputType" to "daily",
     //    "day" to BaseClass().getCurrentWeekday(),
     //    "date" to BaseClass().getCurrentTimeStamp()
+    //    "image" to "image"
 
 
     // RapidAPI
@@ -304,6 +307,8 @@ open class BaseClassFragment : Fragment() {
                 0.0
             }
 
+            val startImage = "default"
+
             val UID = auth.currentUser!!.uid
 
             userBasicInfoMap = hashMapOf(
@@ -316,7 +321,8 @@ open class BaseClassFragment : Fragment() {
                 "age" to age,
                 "gender" to gender,
                 "startBodyFat" to startBodyfat,
-                "date" to BaseClass().getCurrentTimeStamp()
+                "date" to BaseClass().getCurrentTimeStamp(),
+                "startImage" to startImage
             )
 
             // update user data to firestore to userBasicInfo collection
@@ -373,19 +379,24 @@ open class BaseClassFragment : Fragment() {
                 0.0
             }
 
+            val bmi = "default"
+            val image = "default"
+
             val UID = auth.currentUser!!.uid
 
             userMeasurementsMap = hashMapOf(
                 "uid" to UID,
                 "weight" to weight,
+                "bmi" to bmi,
                 "circumference" to circumference,
                 "bodyFat" to bodyFat,
                 "inputType" to "daily",
                 "day" to BaseClass().getCurrentWeekday(),
+                "image" to image,
                 "date" to BaseClass().getCurrentTimeStamp()
             )
 
-            // update user data to firestore to userMeasurements collection
+            // Add user data to firestore to userMeasurements collection
             fireStore.collection("userMeasurements")
                 .document()
                 .set(userMeasurementsMap)
@@ -409,42 +420,34 @@ open class BaseClassFragment : Fragment() {
 
             // Delete the default userMeasurements input after first daily input
             fireStore.collection("userMeasurements")
-                .whereEqualTo("uid", UID)
-                .orderBy("date")
-                .limit(2)
+                .document(UID)
                 .get()
-                .addOnSuccessListener { documents ->
-                    if (documents.size() > 0) {
-                        // There is at least one document that matches the query
-                        val latestDoc = documents.documents[0]
-                        val latestDocId = latestDoc.id
-
-                        // Delete the oldest document
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
                         fireStore.collection("userMeasurements")
-                            .document(latestDocId)
+                            .document(document.id)
                             .delete()
                             .addOnSuccessListener {
                                 Log.d(
                                     TAG,
-                                    "Oldest default document from userMeasurements deleted successfully"
+                                    "UserMeasurement document with UID=$UID deleted successfully"
                                 )
                             }
                             .addOnFailureListener { e ->
                                 Log.w(
                                     TAG,
-                                    "Error deleting default document from userMeasurement",
+                                    "Error deleting UserMeasurement document with UID=$UID",
                                     e
                                 )
                             }
                     } else {
-                        // There are no documents that match the query
-                        Log.d(TAG, "No documents found that match the query")
+                        // The document with the given UID doesn't exist, do nothing
+                        Log.d(TAG, "No document found with UID=$UID")
                     }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG, "Error querying latest userMeasurements documents", e)
+                    Log.w(TAG, "Error querying UserMeasurement documents with UID=$UID", e)
                 }
-
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
 
@@ -484,13 +487,18 @@ open class BaseClassFragment : Fragment() {
 
             val UID = auth.currentUser!!.uid
 
+            val bmi = "default"
+            val image = "default"
+
             userMeasurementsMap = hashMapOf(
                 "uid" to UID,
                 "weight" to weight,
+                "bmi" to bmi,
                 "circumference" to circumference,
                 "bodyFat" to bodyFat,
                 "inputType" to "weekly",
                 "day" to BaseClass().getCurrentWeekday(),
+                "image" to image,
                 "date" to BaseClass().getCurrentTimeStamp()
             )
 
@@ -559,7 +567,7 @@ open class BaseClassFragment : Fragment() {
                     // get userMeasurements from firestore
                     fireStore.collection("userMeasurements")
                         .whereEqualTo("uid", UID)
-                        .orderBy("date", Query.Direction.DESCENDING)
+                        .orderBy("date")
                         .get()
                         .addOnSuccessListener { userMeasurements ->
                             val inflater = LayoutInflater.from(requireContext())
