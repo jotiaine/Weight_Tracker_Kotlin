@@ -33,7 +33,7 @@ class WeeklyInputFragment : BaseClassFragment() {
                 ).show()
             }
             else -> {
-                saveWeeklyFragmentInputs(
+                addWeeklyFragmentInputs(
                     edtWeeklyWeight,
                     edtWeeklyCircumference,
                     edtWeeklyBodyFat

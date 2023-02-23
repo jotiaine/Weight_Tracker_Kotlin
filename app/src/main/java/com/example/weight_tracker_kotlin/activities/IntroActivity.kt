@@ -30,12 +30,6 @@ class IntroActivity : BaseClass() {
 //            Log.d("IntroActivity", "Error: ${e.message}")
 //        }
 
-        // full screen
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
         btnSignIn = findViewById<Button>(R.id.btnSignInActivity)
         btnSignUp = findViewById<Button>(R.id.btnSignUpActivity)
 

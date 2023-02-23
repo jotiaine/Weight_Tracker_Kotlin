@@ -26,7 +26,7 @@ class DailyInputFragment : BaseClassFragment() {
                 ).show()
             }
             else -> {
-                saveDailyFragmentInputs(
+                addDailyFragmentInputs(
                     edtDailyWeight,
                     edtDailyCircumference,
                     edtDailyBodyFat

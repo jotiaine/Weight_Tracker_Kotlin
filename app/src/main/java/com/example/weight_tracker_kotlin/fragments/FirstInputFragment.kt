@@ -62,7 +62,7 @@ class FirstInputFragment : BaseClassFragment() {
 
             else -> {
                 calculateBMI()
-                saveFirstFragmentInputs(
+                addFirstFragmentInputs(
                     edtStartWeight,
                     edtTargetWeight,
                     edtHeight,

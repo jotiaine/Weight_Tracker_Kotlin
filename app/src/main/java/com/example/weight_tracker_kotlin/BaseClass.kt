@@ -27,7 +27,7 @@ open class BaseClass : AppCompatActivity() {
         private var gender = "default" // default
         private var age = 0 // default
         private var height = 0.0 // default
-        private var goal = 0.0 // default
+        private var targetWeight = 0.0 // default
         private var startWeight = 0.0 // default
         private var date = "default" // default
         private var startImage = "default" // default
@@ -53,7 +53,7 @@ open class BaseClass : AppCompatActivity() {
         }
 
         fun setGoal(goal: Double) {
-            this.goal = goal
+            this.targetWeight = goal
         }
 
         fun setStartWeight(startWeight: Double) {
@@ -98,7 +98,7 @@ open class BaseClass : AppCompatActivity() {
         }
 
         fun getGoal(): Double {
-            return goal
+            return targetWeight
         }
 
         fun getStartWeight(): Double {

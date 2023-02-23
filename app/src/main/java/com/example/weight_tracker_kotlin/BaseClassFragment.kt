@@ -1,8 +1,11 @@
 package com.example.weight_tracker_kotlin
 
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -70,6 +73,8 @@ open class BaseClassFragment : Fragment() {
                             showWeeklyInputFragment()
                         }
                     }
+                } else {
+                    Log.d("TAG", "No such document")
                 }
             }
     }
@@ -202,7 +207,7 @@ open class BaseClassFragment : Fragment() {
         }
     }
 
-    protected fun saveFirstFragmentInputs(
+    protected fun addFirstFragmentInputs(
         edtStartWeight: EditText,
         edtTargetWeight: EditText,
         edtHeight: EditText,
@@ -268,7 +273,7 @@ open class BaseClassFragment : Fragment() {
                 "startBMI" to startBMI,
                 "age" to age,
                 "gender" to gender,
-                "startBodyfat" to startBodyfat,
+                "startBodyFat" to startBodyfat,
                 "date" to BaseClass().getCurrentTimeStamp()
             )
 
@@ -284,33 +289,21 @@ open class BaseClassFragment : Fragment() {
                             // remove the fragment from the fragment manager
                             parentFragmentManager.beginTransaction().remove(this).commit()
                         }
-                    Toast.makeText(
-                        requireContext(),
-                        "Successfully updated",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("User data saved successfully")
                 }
                 .addOnFailureListener { e ->
                     Log.w("Error", "Error updating userBasicInfo", e)
-                    Toast.makeText(
-                        requireContext(),
-                        "Error updating userBasicInfo",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("Error updating userBasicInfo")
                 }
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
-            Toast.makeText(
-                requireContext(),
-                "Error updating userBasicInfo",
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast("Error updating userBasicInfo")
         } finally {
             Log.d("TAG", "saveFirstFragmentInputs: finally")
         }
     }
 
-    protected fun saveDailyFragmentInputs(
+    protected fun addDailyFragmentInputs(
         edtDailyWeight: EditText,
         edtDailyCircumference: EditText,
         edtDailyBodyFat: EditText,
@@ -356,11 +349,8 @@ open class BaseClassFragment : Fragment() {
                 .set(userMeasurementsMap)
                 .addOnSuccessListener {
                     Log.d("Success", "User measurements added")
-                    Toast.makeText(
-                        requireContext(),
-                        "User measurements added",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    showToast("User measurements added")
 
                     // hide dailyInputFragment fade animation
                     view?.findViewById<View>(R.id.daily_input_fragment_root_layout)?.animate()
@@ -371,26 +361,20 @@ open class BaseClassFragment : Fragment() {
                 }
                 .addOnFailureListener {
                     Log.e("Error", it.message.toString())
-                    Toast.makeText(
-                        requireContext(),
-                        "Error adding user measurements",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    showToast("Error adding user measurements")
                 }
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
-            Toast.makeText(
-                requireContext(),
-                "Error updating userMeasurements",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            showToast("Error adding user measurements")
         } finally {
             Log.d("TAG", "saveDailyFragmentInputs: finally")
         }
     }
 
 
-    protected fun saveWeeklyFragmentInputs(
+    protected fun addWeeklyFragmentInputs(
         edtWeeklyWeight: EditText,
         edtWeeklyCircumference: EditText,
         edtWeeklyBodyFat: EditText,
@@ -436,11 +420,8 @@ open class BaseClassFragment : Fragment() {
                 .set(userMeasurementsMap)
                 .addOnSuccessListener {
                     Log.d("Success", "User measurements added")
-                    Toast.makeText(
-                        requireContext(),
-                        "User measurements added",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    showToast("User measurements added")
 
                     // hide weeklyInputFragment fade animation
                     view?.findViewById<View>(R.id.weekly_input_fragment_root_layout)?.animate()
@@ -452,21 +433,96 @@ open class BaseClassFragment : Fragment() {
                 }
                 .addOnFailureListener {
                     Log.e("Error", it.message.toString())
-                    Toast.makeText(
-                        requireContext(),
-                        "Error adding user measurements",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    showToast("Error adding user measurements")
                 }
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
-            Toast.makeText(
-                requireContext(),
-                "Error updating userMeasurements",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            showToast("Error adding user measurements")
         } finally {
             Log.d("TAG", "saveWeeklyFragmentInputs: finally")
+        }
+    }
+
+    protected fun getUserData(
+        llHistory: LinearLayout,
+        onSuccess: (userMap: HashMap<String, String>) -> Unit
+    ) {
+        try {
+            auth = FirebaseAuth.getInstance()
+            fireStore = FirebaseFirestore.getInstance()
+
+            val UID = auth.currentUser!!.uid
+
+            val userMap = hashMapOf<String, String>()
+
+            showProgressBar()
+            // get userBasicInfo from firestore
+            val userData = fireStore.collection("userBasicInfo").whereEqualTo("uid", UID)
+                .get()
+                .addOnSuccessListener { userData ->
+                    val startWeight = userData.documents[0].get("startWeight") ?: "0.0"
+                    val targetWeight = userData.documents[0].get("targetWeight") ?: "0.0"
+                    val startCircumference =
+                        userData.documents[0].get("startCircumference") ?: "0.0"
+                    val startBodyFat = userData.documents[0].get("startBodyFat") ?: "0.0"
+
+                    userMap["startWeight"] = startWeight.toString()
+                    userMap["targetWeight"] = targetWeight.toString()
+                    userMap["startCircumference"] = startCircumference.toString()
+                    userMap["startBodyFat"] = startBodyFat.toString()
+                    Log.d("Success", "User data fetched")
+                    println(userMap)
+
+
+                    // get userMeasurements from firestore
+                    val userMeasurements = fireStore.collection("userMeasurements")
+                        .whereEqualTo("uid", UID)
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .get()
+                        .addOnSuccessListener { userMeasurements ->
+                            val inflater = LayoutInflater.from(requireContext())
+
+                            for (i in userMeasurements.documents.size - 1 downTo 0) {
+                                val weight = userMeasurements.documents[i].get("weight") ?: "0.0"
+                                val date = userMeasurements.documents[i].get("date") ?: "default"
+
+                                val cardView = inflater.inflate(R.layout.viewcard_history, null, false)
+                                cardView.findViewById<TextView>(R.id.txWeightHistory).text = "$weight kg"
+                                cardView.findViewById<TextView>(R.id.txvDateHistory).text = date.toString()
+                                llHistory.addView(cardView)
+                            }
+
+                            val weight = userMeasurements.documents.last().get("weight") ?: "0.0"
+                            val circumference =
+                                userMeasurements.documents.last().get("circumference") ?: "0.0"
+                            val bodyFat = userMeasurements.documents.last().get("bodyFat") ?: "0.0"
+
+                            userMap["weight"] = weight.toString()
+                            userMap["circumference"] = circumference.toString()
+                            userMap["bodyFat"] = bodyFat.toString()
+                            userMap["lostWeight"] =
+                                (startWeight.toString().toDouble() - weight.toString()
+                                    .toDouble()).toString()
+                            Log.d("Success", "User measurements fetched")
+                            println(userMap)
+                            onSuccess(userMap)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Error", "Error getting user measurements: ${e.message}")
+                            showToast("Error getting user measurements")
+                        }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Error", "Error getting user data: ${e.message}")
+                    showToast("Error getting user data")
+                }
+        } catch (e: Exception) {
+            Log.e("Error", "fetchUserData: ${e.message}")
+        } finally {
+            Log.d("TAG", "fetchUserData: finally")
+            hideProgressBar()
         }
     }
 
@@ -535,31 +591,36 @@ open class BaseClassFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Account deleted
                     println("Account deleted")
-                    Toast.makeText(context, "Account deleted", Toast.LENGTH_SHORT).show()
-                    // Go to intro screen
+                    showToast("Account deleted")
                 } else {
                     // Account not deleted
                     println("Account not deleted")
-                    Toast.makeText(context, "Account not deleted", Toast.LENGTH_SHORT).show()
+                    showToast("Account not deleted")
                 }
             }
             return true
         } catch (e: Exception) {
             // Account not deleted
-            println("Account not deleted")
-            Toast.makeText(context, "Account not deleted", Toast.LENGTH_SHORT).show()
+            Log.e("Error", "deleteAccount: ${e.message}")
+            showToast("Account not deleted")
             return false
         } finally {
             // Account deleted
-            println("Account deleted completed")
+            Log.d("TAG", "deleteAccount: finally")
             auth.signOut()
         }
     }
 
     protected fun logOut() {
-        auth = FirebaseAuth.getInstance()
-        // Log out
-        auth.signOut()
+        try {
+            auth = FirebaseAuth.getInstance()
+            // Log out
+            auth.signOut()
+        } catch (e: Exception) {
+            Log.e("Error", "logOut: ${e.message}")
+        } finally {
+            Log.d("TAG", "logOut: finally")
+        }
     }
 
 
@@ -637,5 +698,13 @@ open class BaseClassFragment : Fragment() {
 
     protected fun hideProgressBar() {
         loadingDialog.dismiss()
+    }
+
+    private fun showToast(message: String) {
+        try {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.e("Error", "showToast() error: ${e.message.toString()}")
+        }
     }
 }

@@ -41,12 +41,6 @@ class SignUpActivity : BaseClass() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        // full screen
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
         btnSignUp = findViewById(R.id.btnSignUp) // Get sign up button
         imbGoBackSignUp = findViewById(R.id.imbGoBackSignUp)
 

@@ -27,12 +27,6 @@ class MainActivity : BaseClass() {
 
         FirebaseApp.initializeApp(this)
 
-        // full screen
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
         fragmentManager = supportFragmentManager
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
