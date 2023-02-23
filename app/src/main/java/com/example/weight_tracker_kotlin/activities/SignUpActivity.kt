@@ -1,6 +1,5 @@
 package com.example.weight_tracker_kotlin.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
@@ -15,7 +14,6 @@ class SignUpActivity : BaseClass() {
     private lateinit var signUpUsernameText: EditText // username text
     private lateinit var signUpPasswordText: EditText // password text
     private lateinit var imbGoBackSignUp: ImageButton // Sign in button
-    private lateinit var intent: Intent
 
     private fun validateSignUp() {
         when {
@@ -27,19 +25,11 @@ class SignUpActivity : BaseClass() {
             }
             else -> {
                 signUp(
-                    signUpUsernameText.text.toString().trim(),
-                    signUpPasswordText.text.toString().trim()
+                    signUpUsernameText.text.toString(),
+                    signUpPasswordText.text.toString()
                 )
             }
         }
-    }
-
-
-    private fun goBackToIntroActivity() {
-        // go to intro activity on click
-        intent = Intent(this, IntroActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     private fun clearTextFields() {
@@ -66,12 +56,11 @@ class SignUpActivity : BaseClass() {
             signUpPasswordText = findViewById(R.id.signUpPasswordText)
             validateSignUp()
             clearTextFields()
-//            goBackToIntroActivity()
         }
 
         // listening imbGoBack
         imbGoBackSignUp.setOnClickListener {
-            goBackToIntroActivity()
+            navigateToIntroActivity()
         }
 
         //TODO: 1. add sign up functionality - DONE

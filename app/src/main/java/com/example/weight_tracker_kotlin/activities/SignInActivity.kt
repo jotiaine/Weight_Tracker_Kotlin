@@ -1,8 +1,6 @@
 package com.example.weight_tracker_kotlin.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -16,10 +14,9 @@ class SignInActivity : BaseClass() {
     private lateinit var signInUsernameText: EditText // username text
     private lateinit var signInPasswordText: EditText // password text
     private lateinit var imbGoBackSignIn: ImageButton // Sign in button
-    private lateinit var intent: Intent
 
     private fun validateSignIn() {
-       when {
+        when {
             signInUsernameText.text.toString().isEmpty() -> {
                 Toast.makeText(this, "Please enter username", Toast.LENGTH_SHORT).show()
 
@@ -27,15 +24,11 @@ class SignInActivity : BaseClass() {
             signInPasswordText.text.toString().isEmpty() -> {
                 Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show()
             }
-            else -> signIn(signInUsernameText.text.toString().trim(), signInPasswordText.text.toString().trim())
+            else -> signIn(
+                signInUsernameText.text.toString().trim(),
+                signInPasswordText.text.toString().trim()
+            )
         }
-    }
-
-    private fun goBackToIntroActivity() {
-        // go to intro activity on click
-        intent = Intent(this, IntroActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     private fun clearTextFields() {
@@ -71,14 +64,12 @@ class SignInActivity : BaseClass() {
         // listening txvForgotPassword
         txvForgotPassword.setOnClickListener {
             // go to forgot password activity on click
-            intent = Intent(this, ForgotPasswordActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigateToForgotPasswordActivity()
         }
 
         // listening imbGoBack
         imbGoBackSignIn.setOnClickListener {
-            goBackToIntroActivity()
+            navigateToIntroActivity()
         }
     }
 }

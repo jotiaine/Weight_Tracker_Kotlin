@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weight_tracker_kotlin.activities.ForgotPasswordActivity
+import com.example.weight_tracker_kotlin.activities.IntroActivity
 import com.example.weight_tracker_kotlin.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +20,7 @@ open class BaseClass : AppCompatActivity() {
     private lateinit var userBasicInfo: UserBasicInfo
     private lateinit var userMeasurements: UserMeasurements
     private lateinit var loadingDialog: AlertDialog
+    private lateinit var intent: Intent
 
     inner class UserBasicInfo {
         private var uid = "default" // default
@@ -191,78 +194,98 @@ open class BaseClass : AppCompatActivity() {
         }
     }
 
-    protected fun getCurrentUserID(): String {
-        var currentUser = FirebaseAuth.getInstance().currentUser
-        var currentUserID = ""
-        if (currentUser != null) {
-            currentUserID = currentUser.uid
+    private fun getCurrentUserID(): String {
+        return try {
+            auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+            val currentUserID = currentUser!!.uid
+            currentUserID
+        } catch (e: Exception) {
+            Log.e("Error", e.message.toString())
+            ""
+        } finally {
+            Log.d("Success", "getCurrentUserID() success")
         }
-        return currentUserID
     }
 
     fun getCurrentTimeStamp(): String {
-        val now = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        return now.format(formatter)
+        return try {
+            val now = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            now.format(formatter)
+        } catch (e: Exception) {
+            Log.e("Error", e.message.toString())
+            ""
+        } finally {
+            Log.d("Success", "getCurrentTimeStamp() success")
+        }
     }
 
     fun getCurrentWeekday(): String {
-        val now = LocalDateTime.now()
-        val eet = now.atZone(ZoneId.of("Europe/Helsinki"))
-        return eet.dayOfWeek.toString()
+        return try {
+            val now = LocalDateTime.now()
+            val eet = now.atZone(ZoneId.of("Europe/Helsinki"))
+            return eet.dayOfWeek.toString()
+        } catch (e: Exception) {
+            Log.e("Error", e.message.toString())
+            ""
+        } finally {
+            Log.d("Success", "getCurrentWeekday() success")
+        }
     }
 
     protected fun signUp(signUpUsernameText: String, signUpPasswordText: String) {
         try {
-            // Show loading dialog
-            showProgressBar()
-
             auth = FirebaseAuth.getInstance()
             userBasicInfo = UserBasicInfo()
             userMeasurements = UserMeasurements()
+
+            // Show loading dialog
+            showProgressBar()
 
             auth.createUserWithEmailAndPassword(
                 signUpUsernameText,
                 signUpPasswordText
             )
-                .addOnSuccessListener {
-                    userBasicInfo.setUID(auth.currentUser!!.uid)
-                    userMeasurements.setUID(auth.currentUser!!.uid)
-                    userBasicInfo.setDate(getCurrentTimeStamp())
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        userBasicInfo.setUID(auth.currentUser!!.uid)
+                        userMeasurements.setUID(auth.currentUser!!.uid)
+                        userBasicInfo.setDate(getCurrentTimeStamp())
 
-                    val UID = getCurrentUserID()
+                        val UID = getCurrentUserID()
 
-                    println("Sign up successful")
-                    // Add the userBasicInfo to firestore
-                    fireStore.collection("userBasicInfo")
-                        .document(UID)
-                        .set(userBasicInfo)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
-                        }
+                        println("Sign up successful")
+                        // Add the userBasicInfo to firestore
+                        fireStore.collection("userBasicInfo")
+                            .document(UID)
+                            .set(userBasicInfo)
+                            .addOnSuccessListener {
+                                showToast("Sign up successful")
+                            }
+                            .addOnFailureListener {
+                                showToast("Sign up failed")
+                            }
 
-                    // add the userMeasurements to firestore
-                    fireStore.collection("userMeasurements")
-                        .document(UID)
-                        .set(userMeasurements)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                        // add the userMeasurements to firestore
+                        fireStore.collection("userMeasurements")
+                            .document(UID)
+                            .set(userMeasurements)
+                            .addOnSuccessListener {
+                                showToast("Sign up successful")
+                            }
+                            .addOnFailureListener {
+                                showToast("Sign up failed")
+                            }
 
+                        // go to main activity
+                        val intent = Intent(this, IntroActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        showToast("Sign up failed")
+                    }
                     hideProgressBar()
-                }
-                .addOnFailureListener {
-                    hideProgressBar()
-                    Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show()
                 }
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
@@ -284,81 +307,107 @@ open class BaseClass : AppCompatActivity() {
             )
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        hideProgressBar() // hide loading dialog
-
-                        // print user info email, uid if exists
-                        println("Signed in successfully")
-                        println("User info: ${auth.currentUser?.email}")
-                        println("User info: ${auth.currentUser?.uid}")
-                        println("User info: ${auth.currentUser}")
-
                         // go to main activity
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        navigateToMainActivity()
                     } else {
-                        hideProgressBar() // hide loading dialog
                         // If sign in fails
-                        println("Error: ${task.exception?.message}")
-                        AlertDialog.Builder(this)
-                            .setTitle("Error")
-                            .setMessage("Sign in failed")
-                            .setPositiveButton("OK") { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .show()
+                        showAlertDialog("Error", "Sign in failed")
                     }
+                    hideProgressBar()
                 }
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            Log.e("Error", "signIn() error: ${e.message.toString()}")
         } finally {
-            println("Sign in complete")
             // close sign in activity by signing out regardless of success or failure
             // this will prevent data leaks
             auth.signOut()
         }
     }
 
+    /*******************
+     * Navigation
+     *******************/
+    protected fun navigateToIntroActivity() {
+        try {
+            // go to intro activity on click
+            intent = Intent(this, IntroActivity::class.java)
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            Log.e("Error", "navigateToIntroActivity() error: ${e.message.toString()}")
+        }
+    }
+
+    private fun navigateToMainActivity() {
+        try {
+            // go to main activity
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            Log.e("Error", "navigateToMainActivity() error: ${e.message.toString()}")
+        }
+    }
+
+    protected fun navigateToForgotPasswordActivity() {
+        try {
+            // go to forgot password activity
+            intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            Log.e("Error", "navigateToForgotPasswordActivity() error: ${e.message.toString()}")
+        }
+    }
 
     /*******************
      * Loading Dialog, Alerts, Toasts & errors
      *******************/
     private fun showProgressBar() {
-        // Show loading from res/layout/loading.xml
-        loadingDialog = AlertDialog.Builder(this)
-            .setView(R.layout.loading)
-            .setCancelable(false)
-            .create()
+        try {
+            // Show loading from res/layout/loading.xml
+            // delay
+            loadingDialog = AlertDialog.Builder(this)
+                .setView(R.layout.loading)
+                .setCancelable(false)
+                .create()
 
-        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        loadingDialog.show()
-    }
-
-    private fun hideProgressBar() {
-        loadingDialog.dismiss()
-    }
-
-    private fun userRegisteredSuccess() {
-        if (!isFinishing) {
-            AlertDialog.Builder(this)
-                .setTitle("Success")
-                .setMessage("User registration success")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            loadingDialog.show()
+        } catch (e: Exception) {
+            Log.e("Error", "Failed to show progress bar: ${e.message}", e)
         }
     }
 
-    private fun userRegisteredFailed() {
-        if (!isFinishing) {
+    private fun hideProgressBar() {
+        try {
+            if (loadingDialog != null && loadingDialog!!.isShowing && !isFinishing) {
+                loadingDialog!!.dismiss()
+            }
+        } catch (e: Exception) {
+            Log.e("Error", "Failed to hide progress bar: ${e.message}", e)
+        }
+    }
+
+    private fun showAlertDialog(title: String, message: String) {
+        try {
             AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage("User registered failed")
+                .setTitle(title)
+                .setMessage(message)
                 .setPositiveButton("OK") { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()
+        } catch (e: Exception) {
+            Log.e("Error", "showAlertDialog() error: ${e.message.toString()}")
+        }
+    }
+
+    private fun showToast(message: String) {
+        try {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.e("Error", "showToast() error: ${e.message.toString()}")
         }
     }
 }

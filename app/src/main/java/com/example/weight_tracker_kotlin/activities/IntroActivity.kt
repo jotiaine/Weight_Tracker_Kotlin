@@ -2,6 +2,7 @@ package com.example.weight_tracker_kotlin.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
 import com.example.weight_tracker_kotlin.BaseClass
@@ -18,12 +19,16 @@ class IntroActivity : BaseClass() {
 
         // Check if currentUser exists then go to main directly
         // Automatic login
-        var currentUserID = getCurrentUserID()
-        if (currentUserID.isNotEmpty()) {
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+//        try {
+//            var currentUserID = getCurrentUserID()
+//            if (currentUserID.isNotEmpty()) {
+//                intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
+//                finish()
+//            }
+//        } catch (e: Exception) {
+//            Log.d("IntroActivity", "Error: ${e.message}")
+//        }
 
         // full screen
         window.setFlags(
