@@ -52,8 +52,8 @@ open class BaseClass : AppCompatActivity() {
             this.height = height
         }
 
-        fun setGoal(goal: Double) {
-            this.targetWeight = goal
+        fun setTargetWeight(targetWeight: Double) {
+            this.targetWeight = targetWeight
         }
 
         fun setStartWeight(startWeight: Double) {
@@ -97,7 +97,7 @@ open class BaseClass : AppCompatActivity() {
             return height
         }
 
-        fun getGoal(): Double {
+        fun getTargetWeight(): Double {
             return targetWeight
         }
 
@@ -210,9 +210,11 @@ open class BaseClass : AppCompatActivity() {
 
     fun getCurrentTimeStamp(): String {
         return try {
-            val now = LocalDateTime.now()
+            val now = LocalDateTime.now() // Current devices time
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            now.format(formatter)
+            val formattedTime = now.format(formatter)
+            Log.d("getCurrentTimeStamp", "Current time: $formattedTime")
+            formattedTime
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
             ""
@@ -252,6 +254,7 @@ open class BaseClass : AppCompatActivity() {
                         userBasicInfo.setUID(auth.currentUser!!.uid)
                         userMeasurements.setUID(auth.currentUser!!.uid)
                         userBasicInfo.setDate(getCurrentTimeStamp())
+                        userMeasurements.setDate(getCurrentTimeStamp())
 
                         val UID = getCurrentUserID()
 

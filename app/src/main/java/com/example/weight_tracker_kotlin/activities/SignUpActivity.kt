@@ -63,13 +63,15 @@ class SignUpActivity : BaseClass() {
         //TODO: 2.5 Create Navigation - DONE
         //TODO: 3. Create logout in account activity - DONE
         //TODO: 4. Create weight entry in main activity - DONE
-        //TODO: 4.5 Motivation card on top(RapidAPI) - DONE not working properly
-        //TODO: 5. Create weight summary in statistic activity and UI
-        //TODO: 5.5 FIX image buttons to add images to firebase storage
-        //TODO: 6. Create Delete account in account activity - DONE BUT is not working properly!
-        //https://firebase.google.com/docs/firestore/manage-data/delete-data#kotlin+ktx_2
-        //TODO: 7. Create forgot password functionality // Extra
-        //TODO: 8. Create change password functionality in account fragment // Extra
+        //TODO: 4.5 Motivation card on top(RapidAPI) - DONE
+        //TODO: 5. Create weight summary in statistic activity and UI - DONE
+        //TODO: 6. Create Delete account in account activity - DONE
+        // Version 1 done, without forgot password, change password and image adding
+
+        // EXTRA DEVELOPMENT
+        //TODO: 7. FIX image buttons to add images to firebase storage
+        //TODO: 8. Create forgot password functionality
+        //TODO: 9. Create change password functionality in account fragment
 
     }
 }

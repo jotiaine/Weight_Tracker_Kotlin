@@ -58,7 +58,8 @@ class SignInActivity : BaseClass() {
         // listening txvForgotPassword
         txvForgotPassword.setOnClickListener {
             // go to forgot password activity on click
-            navigateToForgotPasswordActivity()
+//            navigateToForgotPasswordActivity()
+                navigateToIntroActivity()
         }
 
         // listening imbGoBack

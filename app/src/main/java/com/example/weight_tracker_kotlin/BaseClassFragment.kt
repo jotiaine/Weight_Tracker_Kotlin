@@ -1,5 +1,6 @@
 package com.example.weight_tracker_kotlin
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,29 @@ open class BaseClassFragment : Fragment() {
     private lateinit var noInputsFragment: NoInputsFragment
     private lateinit var loadingDialog: AlertDialog
 
+    // hashmaps
+    private lateinit var userBasicInfoMap: MutableMap<String, Any>
+
+    //    "uid" to UID,
+    //    "startWeight" to startWeight,
+    //    "targetWeight" to targetWeight,
+    //    "height" to height,
+    //    "startCircumference" to startCircumference,
+    //    "startBMI" to startBMI,
+    //    "age" to age,
+    //    "gender" to gender,
+    //    "startBodyFat" to startBodyfat,
+    //    "date" to BaseClass().getCurrentTimeStamp()
+    private lateinit var userMeasurementsMap: MutableMap<String, Any>
+    //    "uid" to UID,
+    //    "weight" to weight,
+    //    "circumference" to circumference,
+    //    "bodyFat" to bodyFat,
+    //    "inputType" to "daily",
+    //    "day" to BaseClass().getCurrentWeekday(),
+    //    "date" to BaseClass().getCurrentTimeStamp()
+
+
     // RapidAPI
     private lateinit var motivationText: String
     private lateinit var author: String
@@ -44,8 +68,13 @@ open class BaseClassFragment : Fragment() {
     protected fun showFirstInputFragment() {
         auth = FirebaseAuth.getInstance()
         fireStore = FirebaseFirestore.getInstance()
-        // if startWeight is 0.0 show firstInputFragment
-        // else hide firstInputFragment
+
+        // Get data from userBasicInfo
+        // if startWeight is 0.0(default, not set) show firstInputFragment
+        // else show dailyInputFragment or weeklyInputFragment
+        // first login -> firstInputFragment
+        // monday to saturday -> dailyInputFragment // if done -> noInputsFragment
+        // sunday -> weeklyInputFragment // if done -> noInputsFragment
         val UID = auth.currentUser!!.uid
         fireStore.collection("userBasicInfo")
             .document(UID)
@@ -55,21 +84,13 @@ open class BaseClassFragment : Fragment() {
                     val startWeight = document.get("startWeight")
                     val day = BaseClass().getCurrentWeekday()
                     if (startWeight == 0.0) {
-                        fragmentManager = requireActivity().supportFragmentManager
-                        fragmentTransaction = fragmentManager.beginTransaction()
-                        firstInputFragment = FirstInputFragment()
-                        fragmentTransaction.replace(R.id.frInputFragments, firstInputFragment)
-                        fragmentTransaction.commit()
+                        showFragment("firstInputFragment")
                     } else {
-                        // if it is not Sunday show dailyInputFragment
-                        // if already exist data on today, hide dailyInputFragment
-                        println(day)
                         if (day != "SUNDAY") {
+                            // monday to saturday
                             showDailyInputFragment()
                         } else {
-                            // else it is sunday -> show weeklyInputFragment
-                            // if already exist data on this day, hide dailyInputFragment
-                            println("going to show weeklyInputFragment")
+                            // sunday
                             showWeeklyInputFragment()
                         }
                     }
@@ -87,7 +108,7 @@ open class BaseClassFragment : Fragment() {
             val UID = auth.currentUser!!.uid
 
             // Get latest date from userMeasurements
-            // if latest date is today, hide dailyInputFragment
+            // if latest date is today, show noInputFragment
             fireStore.collection("userMeasurements")
                 .whereEqualTo("uid", UID)
                 .whereEqualTo("inputType", "daily")
@@ -108,29 +129,21 @@ open class BaseClassFragment : Fragment() {
                         println(latestDateDate == todayDate)
 
                         if (latestDateDate.lowercase() == todayDate.lowercase() && inputType == "daily") {
-                            // hide dailyInputFragment if showing
-                            // show noInputsFragment if not showing
+                            // User has done daily input today
+                            // show noInputsFragment
                             println("show noInputsFragment")
-                            fragmentManager = requireActivity().supportFragmentManager
-                            fragmentTransaction = fragmentManager.beginTransaction()
-                            noInputsFragment = NoInputsFragment()
-                            fragmentTransaction.replace(R.id.frInputFragments, noInputsFragment)
-                            fragmentTransaction.commit()
+                            showFragment("noInputsFragment")
                         } else {
+                            // User has not done daily input today
+                            // show dailyInputFragment
                             println("show dailyInputFragment")
-                            fragmentManager = requireActivity().supportFragmentManager
-                            fragmentTransaction = fragmentManager.beginTransaction()
-                            dailyInputFragment = DailyInputFragment()
-                            fragmentTransaction.replace(R.id.frInputFragments, dailyInputFragment)
-                            fragmentTransaction.commit()
+                            showFragment("dailyInputFragment")
                         }
                     } else {
+                        // Not found latest userMeasurements
+                        // show dailyInputFragment
                         println("show dailyInputFragment")
-                        fragmentManager = requireActivity().supportFragmentManager
-                        fragmentTransaction = fragmentManager.beginTransaction()
-                        dailyInputFragment = DailyInputFragment()
-                        fragmentTransaction.replace(R.id.frInputFragments, dailyInputFragment)
-                        fragmentTransaction.commit()
+                        showFragment("dailyInputFragment")
                     }
                 }
                 .addOnFailureListener {
@@ -151,7 +164,7 @@ open class BaseClassFragment : Fragment() {
             val UID = auth.currentUser!!.uid
 
             // Get latest date from userMeasurements
-            // if latest date is today, hide weeklyInputFragment
+            // if latest date is today, show noInputFragment
             fireStore.collection("userMeasurements")
                 .whereEqualTo("uid", UID)
                 .whereEqualTo("inputType", "weekly")
@@ -172,29 +185,21 @@ open class BaseClassFragment : Fragment() {
                         println(latestDateDate == todayDate)
 
                         if (latestDateDate.lowercase() == todayDate.lowercase() && inputType == "weekly") {
-                            // hide weeklyInputFragment if showing
-                            // show noInputsFragment if not showing
+                            // User has done weekly input today
+                            // show noInputsFragment
                             println("showNoInputsFragment")
-                            fragmentManager = requireActivity().supportFragmentManager
-                            fragmentTransaction = fragmentManager.beginTransaction()
-                            noInputsFragment = NoInputsFragment()
-                            fragmentTransaction.replace(R.id.frInputFragments, noInputsFragment)
-                            fragmentTransaction.commit()
+                            showFragment("noInputsFragment")
                         } else {
+                            // User has not done weekly input today
+                            // show weeklyInputFragment
                             println("showWeeklyInputFragment")
-                            fragmentManager = requireActivity().supportFragmentManager
-                            fragmentTransaction = fragmentManager.beginTransaction()
-                            weeklyInputFragment = WeeklyInputFragment()
-                            fragmentTransaction.replace(R.id.frInputFragments, weeklyInputFragment)
-                            fragmentTransaction.commit()
+                            showFragment("weeklyInputFragment")
                         }
                     } else {
+                        // Not found latest userMeasurements
+                        // show weeklyInputFragment
                         println("showWeeklyInputFragment")
-                        fragmentManager = requireActivity().supportFragmentManager
-                        fragmentTransaction = fragmentManager.beginTransaction()
-                        weeklyInputFragment = WeeklyInputFragment()
-                        fragmentTransaction.replace(R.id.frInputFragments, weeklyInputFragment)
-                        fragmentTransaction.commit()
+                        showFragment("weeklyInputFragment")
                     }
                 }
                 .addOnFailureListener {
@@ -204,6 +209,43 @@ open class BaseClassFragment : Fragment() {
             Log.e("TAG", "showWeeklyInputFragment: ", e)
         } finally {
             Log.d("TAG", "showWeeklyInputFragment: finally")
+        }
+    }
+
+    private fun showFragment(fragment: String) {
+        try {
+            fragmentManager = requireActivity().supportFragmentManager
+            fragmentTransaction = fragmentManager.beginTransaction()
+            // if fragment is
+            when (fragment) {
+                "firstInputFragment" -> {
+                    firstInputFragment = FirstInputFragment()
+                    fragmentTransaction.replace(R.id.frInputFragments, firstInputFragment)
+                    fragmentTransaction.commit()
+                }
+                "dailyInputFragment" -> {
+                    dailyInputFragment = DailyInputFragment()
+                    fragmentTransaction.replace(R.id.frInputFragments, dailyInputFragment)
+                    fragmentTransaction.commit()
+                }
+                "weeklyInputFragment" -> {
+                    weeklyInputFragment = WeeklyInputFragment()
+                    fragmentTransaction.replace(R.id.frInputFragments, weeklyInputFragment)
+                    fragmentTransaction.commit()
+                }
+                "noInputsFragment" -> {
+                    noInputsFragment = NoInputsFragment()
+                    fragmentTransaction.replace(R.id.frInputFragments, noInputsFragment)
+                    fragmentTransaction.commit()
+                }
+                else -> {
+                    // do nothing
+                    Log.d("TAG", "showFragment: Else block")
+                    return
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("Error", "showFragment: ${e.message}")
         }
     }
 
@@ -264,7 +306,7 @@ open class BaseClassFragment : Fragment() {
 
             val UID = auth.currentUser!!.uid
 
-            val userBasicInfoMap = hashMapOf(
+            userBasicInfoMap = hashMapOf(
                 "uid" to UID,
                 "startWeight" to startWeight,
                 "targetWeight" to targetWeight,
@@ -333,7 +375,7 @@ open class BaseClassFragment : Fragment() {
 
             val UID = auth.currentUser!!.uid
 
-            val userMeasurementsMap = hashMapOf(
+            userMeasurementsMap = hashMapOf(
                 "uid" to UID,
                 "weight" to weight,
                 "circumference" to circumference,
@@ -364,6 +406,45 @@ open class BaseClassFragment : Fragment() {
 
                     showToast("Error adding user measurements")
                 }
+
+            // Delete the default userMeasurements input after first daily input
+            fireStore.collection("userMeasurements")
+                .whereEqualTo("uid", UID)
+                .orderBy("date")
+                .limit(2)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (documents.size() > 0) {
+                        // There is at least one document that matches the query
+                        val latestDoc = documents.documents[0]
+                        val latestDocId = latestDoc.id
+
+                        // Delete the oldest document
+                        fireStore.collection("userMeasurements")
+                            .document(latestDocId)
+                            .delete()
+                            .addOnSuccessListener {
+                                Log.d(
+                                    TAG,
+                                    "Oldest default document from userMeasurements deleted successfully"
+                                )
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(
+                                    TAG,
+                                    "Error deleting default document from userMeasurement",
+                                    e
+                                )
+                            }
+                    } else {
+                        // There are no documents that match the query
+                        Log.d(TAG, "No documents found that match the query")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error querying latest userMeasurements documents", e)
+                }
+
         } catch (e: Exception) {
             Log.e("Error", e.message.toString())
 
@@ -372,7 +453,6 @@ open class BaseClassFragment : Fragment() {
             Log.d("TAG", "saveDailyFragmentInputs: finally")
         }
     }
-
 
     protected fun addWeeklyFragmentInputs(
         edtWeeklyWeight: EditText,
@@ -404,7 +484,7 @@ open class BaseClassFragment : Fragment() {
 
             val UID = auth.currentUser!!.uid
 
-            val userMeasurementsMap = hashMapOf(
+            userMeasurementsMap = hashMapOf(
                 "uid" to UID,
                 "weight" to weight,
                 "circumference" to circumference,
@@ -459,7 +539,7 @@ open class BaseClassFragment : Fragment() {
 
             showProgressBar()
             // get userBasicInfo from firestore
-            val userData = fireStore.collection("userBasicInfo").whereEqualTo("uid", UID)
+            fireStore.collection("userBasicInfo").whereEqualTo("uid", UID)
                 .get()
                 .addOnSuccessListener { userData ->
                     val startWeight = userData.documents[0].get("startWeight") ?: "0.0"
@@ -477,7 +557,7 @@ open class BaseClassFragment : Fragment() {
 
 
                     // get userMeasurements from firestore
-                    val userMeasurements = fireStore.collection("userMeasurements")
+                    fireStore.collection("userMeasurements")
                         .whereEqualTo("uid", UID)
                         .orderBy("date", Query.Direction.DESCENDING)
                         .get()
@@ -488,13 +568,19 @@ open class BaseClassFragment : Fragment() {
                                 val weight = userMeasurements.documents[i].get("weight") ?: "0.0"
                                 val date = userMeasurements.documents[i].get("date") ?: "default"
 
-                                val cardView = inflater.inflate(R.layout.viewcard_history, null, false)
-                                cardView.findViewById<TextView>(R.id.txWeightHistory).text = "$weight kg"
-                                cardView.findViewById<TextView>(R.id.txvDateHistory).text = date.toString()
+                                val cardView =
+                                    inflater.inflate(R.layout.viewcard_history, null, false)
+                                cardView.findViewById<TextView>(R.id.txWeightHistory).text =
+                                    "$weight kg"
+                                cardView.findViewById<TextView>(R.id.txvDateHistory).text =
+                                    date.toString()
                                 llHistory.addView(cardView)
                             }
 
-                            val weight = userMeasurements.documents.last().get("weight") ?: "0.0"
+                            val weight = when (userMeasurements.documents.last().get("weight")) {
+                                0.0 -> startWeight
+                                else -> userMeasurements.documents.last().get("weight")
+                            }
                             val circumference =
                                 userMeasurements.documents.last().get("circumference") ?: "0.0"
                             val bodyFat = userMeasurements.documents.last().get("bodyFat") ?: "0.0"
@@ -571,14 +657,14 @@ open class BaseClassFragment : Fragment() {
                 }
                 .addOnFailureListener {
                     // User data not deleted
-                    println("userMeasurements not deleted")
+                    Log.e("Error", "deleteUserData: ${it.message}")
                 }
         } catch (e: Exception) {
             // User data not deleted
-            println("User data not deleted")
+            Log.e("Error", "deleteUserData: ${e.message}")
         } finally {
             // User data deleted
-            println("User data deleted completed")
+            Log.d("TAG", "deleteUserData: finally")
         }
     }
 
@@ -623,6 +709,9 @@ open class BaseClassFragment : Fragment() {
         }
     }
 
+    /*******************
+     * RapidAPI
+     *******************/
 
     protected fun getMotivationQuote(): String {
         try {
@@ -685,19 +774,31 @@ open class BaseClassFragment : Fragment() {
         return "$motivationText - $author"
     }
 
-    protected fun showProgressBar() {
-        // Show loading from res/layout/loading.xml
-        loadingDialog = AlertDialog.Builder(requireContext())
-            .setView(R.layout.loading)
-            .setCancelable(false)
-            .create()
+    /*******************
+     * Loading Dialog, Alerts, Toasts & errors
+     *******************/
 
-        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        loadingDialog.show()
+    protected fun showProgressBar() {
+        try {
+            // Show loading from res/layout/loading.xml
+            loadingDialog = AlertDialog.Builder(requireContext())
+                .setView(R.layout.loading)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            loadingDialog.show()
+        } catch (e: Exception) {
+            Log.e("Error", "showProgressBar: ${e.message}")
+        }
     }
 
     protected fun hideProgressBar() {
-        loadingDialog.dismiss()
+        try {
+            loadingDialog.dismiss()
+        } catch (e: Exception) {
+            Log.e("Error", "hideProgressBar: ${e.message}")
+        }
     }
 
     private fun showToast(message: String) {
