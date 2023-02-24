@@ -560,9 +560,9 @@ open class BaseClassFragment : Fragment() {
                     userMap["targetWeight"] = targetWeight.toString()
                     userMap["startCircumference"] = startCircumference.toString()
                     userMap["startBodyFat"] = startBodyFat.toString()
+
                     Log.d("Success", "User data fetched")
                     println(userMap)
-
 
                     // get userMeasurements from firestore
                     fireStore.collection("userMeasurements")

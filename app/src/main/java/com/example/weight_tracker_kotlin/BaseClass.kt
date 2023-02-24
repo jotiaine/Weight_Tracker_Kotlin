@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 open class BaseClass : AppCompatActivity() {
@@ -34,6 +35,13 @@ open class BaseClass : AppCompatActivity() {
         private var startBMI = 0.0 // default
         private var startCircumference = 0.0 // default
         private var startBodyFat = 0.0 // default
+
+        // maybe need
+//        private var targetBMI = 0.0 // default
+//        private var targetCircumference = 0.0 // default
+//        private var targetBodyFat = 0.0 // default
+//        private var startVisceralFat = 0.0 // default
+//        private var targetVisceralFat = 0.0 // default
 
         // Setters
         fun setUID(uid: String) {

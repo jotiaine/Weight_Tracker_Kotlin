@@ -40,38 +40,82 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ProgressBar
-                    android:id="@+id/weightCircularProgressBar"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:indeterminate="false"
-                    android:minWidth="120dp"
-                    android:minHeight="120dp"
-                    android:progressDrawable="@drawable/custom_progress_bar_circular" />
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="2dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/txvCurrentWeightStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Current weight"
-                    android:textColorHint="@android:color/darker_gray" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:gravity="bottom|center"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txvCurrentWeightStatsNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white" />
+                        <TextView
+                            android:id="@+id/txvRemainingWeighStats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Remaining"
+                            android:textColorHint="@android:color/darker_gray" />
+
+                        <TextView
+                            android:id="@+id/txvRemainingWeightStatsNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/weightCircularProgressBar"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:indeterminate="false"
+                        android:minWidth="120dp"
+                        android:minHeight="120dp"
+                        android:progressDrawable="@drawable/custom_progress_bar_circular"
+                        android:tooltipText="text" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:gravity="bottom|center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txvLostWeightStats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Weight lost"
+                            android:textColor="@android:color/darker_gray" />
+
+                        <TextView
+                            android:id="@+id/txvLostWeightStatsNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/white" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="2dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/txvStartWeightStats"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -79,17 +123,17 @@
                         android:textColor="@android:color/darker_gray" />
 
                     <TextView
-                        android:id="@+id/txvLostWeightStats"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/txvCurrentWeightStats"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Weight loss"
-                        android:textColor="@android:color/darker_gray" />
+                        android:hint="Current"
+                        android:textColorHint="@android:color/darker_gray" />
 
                     <TextView
                         android:id="@+id/txvTargetWeightStats"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -100,12 +144,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
                     android:layout_marginBottom="10dp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/txvStartWeightStatsNum"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -113,17 +160,16 @@
                         android:textColorHint="@color/white" />
 
                     <TextView
-                        android:id="@+id/txvLostWeightStatsNum"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/txvCurrentWeightStatsNum"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white" />
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/txvTargetWeightStatsNum"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -215,7 +261,7 @@
                     android:orientation="vertical">
 
                     <ProgressBar
-                        android:id="@+id/horizontalProgressBarBodyFat"
+                        android:id="@+id/horizontalProgressBarCircumference"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -229,15 +275,15 @@
                         android:layout_marginTop="5dp">
 
                         <TextView
-                            android:id="@+id/txvBodyFatStats"
+                            android:id="@+id/txvCircumferenceStats"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Body fat:"
+                            android:hint="Circumference:"
                             android:textColor="@android:color/darker_gray"
                             android:textColorHint="@android:color/darker_gray" />
 
                         <TextView
-                            android:id="@+id/txvBodyFatStatsNum"
+                            android:id="@+id/txvCircumferenceStatsNum"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
@@ -253,7 +299,6 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="15dp"
                     android:orientation="vertical">
 
                     <ProgressBar
@@ -280,6 +325,48 @@
 
                         <TextView
                             android:id="@+id/txvVisceralFatStatsNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        android:id="@+id/horizontalProgressBarBodyFat"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="100"
+                        android:progress="79"
+                        android:progressDrawable="@drawable/custom_progress_bar_horizontal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
+
+                        <TextView
+                            android:id="@+id/txvBodyFatStats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Body fat:"
+                            android:textColor="@android:color/darker_gray"
+                            android:textColorHint="@android:color/darker_gray" />
+
+                        <TextView
+                            android:id="@+id/txvBodyFatStatsNum"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
