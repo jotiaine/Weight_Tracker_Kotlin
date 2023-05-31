@@ -69,9 +69,11 @@ class SignUpActivity : BaseClass() {
         // Version 1 done, without forgot password, change password and image adding
 
         // EXTRA DEVELOPMENT
-        //TODO: 7. FIX image buttons to add images to firebase storage
-        //TODO: 8. Create forgot password functionality
-        //TODO: 9. Create change password functionality in account fragment
+        //TODO: Statistic screen decimals max 1 or 2
+        //TODO: Add bmi, circumference, visceral fat, body fat progresses to statistic fragment
+        //TODO: FIX image buttons to add images to firebase storage
+        //TODO: Create forgot password functionality
+        //TODO: Create change password functionality in account fragment
 
     }
 }
