@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "588810210014",
-    "project_id": "weight-tracker-kotlin",
-    "storage_bucket": "weight-tracker-kotlin.appspot.com"
+    "project_number": "76408443401",
+    "project_id": "weightsteps-kotlin-1140d",
+    "storage_bucket": "weightsteps-kotlin-1140d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:588810210014:android:1c61bc2db53a4dab7d904f",
+        "mobilesdk_app_id": "1:76408443401:android:57e500f44ac0d0186fded8",
         "android_client_info": {
           "package_name": "com.jonitiainen.weight_tracker_kotlin"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "588810210014-dmceuquva4jnh16kneokim703rtpgijd.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBz8LvAQPmRdSccBVt_uXQfKGTUK2SMKe0"
+          "current_key": "AIzaSyAcudaoTJCfHWHbwxoiQO0pVJA67Ojcu0M"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "588810210014-dmceuquva4jnh16kneokim703rtpgijd.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

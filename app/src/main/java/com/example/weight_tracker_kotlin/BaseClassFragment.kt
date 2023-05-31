@@ -69,38 +69,44 @@ open class BaseClassFragment : Fragment() {
     private lateinit var host: String
 
     protected fun showFirstInputFragment() {
-        auth = FirebaseAuth.getInstance()
-        fireStore = FirebaseFirestore.getInstance()
+        try{
+            auth = FirebaseAuth.getInstance()
+            fireStore = FirebaseFirestore.getInstance()
 
-        // Get data from userBasicInfo
-        // if startWeight is 0.0(default, not set) show firstInputFragment
-        // else show dailyInputFragment or weeklyInputFragment
-        // first login -> firstInputFragment
-        // monday to saturday -> dailyInputFragment // if done -> noInputsFragment
-        // sunday -> weeklyInputFragment // if done -> noInputsFragment
-        val UID = auth.currentUser!!.uid
-        fireStore.collection("userBasicInfo")
-            .document(UID)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val startWeight = document.get("startWeight")
-                    val day = BaseClass().getCurrentWeekday()
-                    if (startWeight == 0.0) {
-                        showFragment("firstInputFragment")
-                    } else {
-                        if (day != "SUNDAY") {
-                            // monday to saturday
-                            showDailyInputFragment()
+            // Get data from userBasicInfo
+            // if startWeight is 0.0(default, not set) show firstInputFragment
+            // else show dailyInputFragment or weeklyInputFragment
+            // first login -> firstInputFragment
+            // monday to saturday -> dailyInputFragment // if done -> noInputsFragment
+            // sunday -> weeklyInputFragment // if done -> noInputsFragment
+            val UID = auth.currentUser!!.uid
+            fireStore.collection("userBasicInfo")
+                .document(UID)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val startWeight = document.get("startWeight")
+                        val day = BaseClass().getCurrentWeekday()
+                        if (startWeight == 0.0) {
+                            showFragment("firstInputFragment")
                         } else {
-                            // sunday
-                            showWeeklyInputFragment()
+                            if (day != "SUNDAY") {
+                                // monday to saturday
+                                showDailyInputFragment()
+                            } else {
+                                // sunday
+                                showWeeklyInputFragment()
+                            }
                         }
+                    } else {
+                        Log.d("TAG", "No such document")
                     }
-                } else {
-                    Log.d("TAG", "No such document")
                 }
-            }
+        } catch (e: Exception) {
+            Log.d("TAG", "Error getting documents: ", e)
+        } finally {
+            Log.d("TAG", "finally")
+        }
     }
 
     private fun showDailyInputFragment() {
